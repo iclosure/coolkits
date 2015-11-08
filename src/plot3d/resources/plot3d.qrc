@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/coolkits/plot3d/image">
+        <file alias="cupTexture.png">image/cupTexture.png</file>
+        <file alias="latte.png">image/latte.png</file>
+        <file alias="qt3d.ico">image/qt3d.ico</file>
+        <file alias="qt3d.png">image/qt3d.png</file>
+    </qresource>
+</RCC>
