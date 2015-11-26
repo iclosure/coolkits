@@ -130,8 +130,8 @@ public:
     static bool defaultAreaDrawable() { return true; }
     static qreal defaultVertexRadius() { return 0.008f; }
     static QColor defaultVertexColor() { return QColor(150, 150, 150, 255); }
-    static QColor defaultGridColor() { return QColor(128, 128, 128, 255); }
-    static QColor defaultTextColor() { return QColor(180, 180, 180, 255); }
+    static QColor defaultGridColor() { return QColor(150, 150, 150, 255); }
+    static QColor defaultTextColor() { return QColor(200, 200, 200, 255); }
     static qreal defaultGridSpacing() { return 0.1f; }
     static J3D::LineHints defaultLineHints() { return J3D::MajorLines; }
     static J3D::SideHints defaultSideHints() { return J3D::MajorSides; }
@@ -442,7 +442,7 @@ void JCoordPrivate::genGridLists()
  */
 void JCoordPrivate::createGridSideList(const QVector<QVector3D> &vertexes)
 {
-    glLineWidth(0.1f);
+    glLineWidth(0.5f);
     glColor4f(gridColor.redF(), gridColor.greenF(), gridColor.blueF(), 0.2f);
     glVertexPointer(3, GL_FLOAT, 0, vertexes.constData());
     glDrawArrays(GL_LINES, 0, vertexes.count());

@@ -87,7 +87,7 @@ void JGLPainterPrivate::save()
     glGetBooleanv(GL_COLOR_MATERIAL, &defaultColorMaterial);
     glGetBooleanv(GL_POINT_SIZE, &defaultPointSize);
     glGetBooleanv(GL_LINE_WIDTH, &defaultLineWidth);
-    glGetBooleanv(GL_MULTISAMPLE_BIT, &defaultMultiSample);
+    //glGetBooleanv(GL_MULTISAMPLE_BIT, &defaultMultiSample);
 }
 
 /**
@@ -107,7 +107,7 @@ void JGLPainterPrivate::restore()
     gl_enable(GL_COLOR_MATERIAL, defaultColorMaterial);
     gl_enable(GL_POINT_SIZE, defaultPointSize);
     gl_enable(GL_LINE_WIDTH, defaultLineWidth);
-    gl_enable(GL_MULTISAMPLE_BIT, defaultMultiSample);
+    //gl_enable(GL_MULTISAMPLE_BIT, defaultMultiSample);
 }
 
 J3D_END_NAMESPACE
