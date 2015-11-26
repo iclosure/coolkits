@@ -23,8 +23,8 @@ class JShapeItemPrivate
       , highlight(true)
       , shapeType(JShapeItem::NoShape)
     {
-        pointSize = 1.0f;
-        lineWidth = 1.0f;
+        pointSize = 1.f;
+        lineWidth = 1.f;
         ellipse.slices = 36;
         ellipse.stacks = 36;
     }
@@ -72,8 +72,16 @@ void JShapeItemPrivate::update()
         return;
     }
 
+    JRect3D box = q->scaledBox();
+    if (!box.isNormalized()) {
+        return;     // not empty
+    }
+
     if (q->isDirty()) {
         q->setGLListId(glGenLists(1));
+        if (!glIsList(q->glListId())) {
+            qErrnoWarning("error");
+        }
     }
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -87,7 +95,6 @@ void JShapeItemPrivate::update()
     glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
 
     // auto-scale
-    JRect3D box = q->scaledBox();
     QVector3D pos = box.center();
 
     switch (shapeType) {
@@ -96,6 +103,9 @@ void JShapeItemPrivate::update()
         glTranslatef(pos.x(), pos.y(), pos.z());
         glutSolidSphere(0.0015f * pointSize, 36, 36);
         if (q->pickable() && q->picking()) {
+            glPushAttrib(GL_DEPTH_BIAS | GL_POLYGON_BIT | GL_LIGHTING_BIT);
+            glDisable(GL_DEPTH_BITS);
+            glDisable(GL_LIGHTING);
             glPopName();
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.5f);
             glutSolidSphere(0.003f * pointSize, 36, 36);
@@ -117,6 +127,7 @@ void JShapeItemPrivate::update()
             glDrawArrays(GL_LINES, 0, vertexes.count());
             glDisable(GL_LINE_STIPPLE);
             glPushName(q->objectId());
+            glPopAttrib();
         }
         break;
     }
@@ -130,6 +141,9 @@ void JShapeItemPrivate::update()
         glVertex3f(box.right(), box.ceil(), box.front());
         glEnd();
         if (q->pickable() && q->picking()) {
+            glPushAttrib(GL_DEPTH_BIAS | GL_POLYGON_BIT | GL_LIGHTING_BIT);
+            glDisable(GL_DEPTH_BITS);
+            glDisable(GL_LIGHTING);
             glPopName();
             glColor4f(color.redF(), color.greenF(), color.blueF(), 0.5f);
             glLineWidth(lineWidth * 4);
@@ -164,6 +178,7 @@ void JShapeItemPrivate::update()
             glDrawArrays(GL_LINES, 0, vertexes.count());
             glDisable(GL_LINE_STIPPLE);
             glPushName((GLuint)q->objectId());
+            glPopAttrib();
         }
         break;
     }
@@ -172,26 +187,30 @@ void JShapeItemPrivate::update()
     {
         glTranslatef(pos.x(), pos.y(), pos.z());
         qreal dx = box.dx(), dy = box.dy(), dz = box.dz();
-        if (dx < 1e-3) {        // plane - y:z
+        if (dx < 1e-6) {        // plane - y:z
             dx = 1e-6;
-        } else if (dy < 1e-3) { // plane - x:z
+        } else if (dy < 1e-6) { // plane - x:z
             dy = 1e-6;
-        } else if (dz < 1e-3) { // plane - x:y
+        } else if (dz < 1e-6) { // plane - x:y
             dz = 1e-6;
         }
         qreal minVal = qMin(qMin(dx, dy), dz);
         glScalef(dx / minVal, dy / minVal, dz / minVal);
         glutSolidCube(minVal);
         if (q->pickable() && q->picking()) {
+            glPushAttrib(GL_DEPTH_BIAS | GL_POLYGON_BIT | GL_LIGHTING_BIT);
+            glDisable(GL_DEPTH_BITS);
+            glDisable(GL_LIGHTING);
             glPopName();
-
-            glColor4f(1.0f, 1.0f, 0.8f, 1.0f);
-            glLineWidth(2.0f);
-            glScalef(1.001f, 1.001f, 1.001f);
+            //
+            glColor4f(0.6f, 0.6f, 0.6f, 0.7f);
+            glPolygonMode(GL_FRONT, GL_LINE);
+            glPolygonOffset(1.0f, 1.0f);
             glutWireCube(minVal);
-
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            //
             glPopMatrix();
-
+            //
             glPushMatrix();
             QVector<QVector3D> vertexes;
             vertexes << QVector3D(box.left(), 0.0f, 0.0f)
@@ -216,6 +235,15 @@ void JShapeItemPrivate::update()
             glDrawArrays(GL_LINES, 0, vertexes.count());
             glDisable(GL_LINE_STIPPLE);
             glPushName((GLuint)q->objectId());
+            glPopAttrib();
+        } else if (q->outlineEnabled()) {
+            QColor outlineColor = color.lighter();
+            glColor4f(outlineColor.redF(), outlineColor.greenF(), outlineColor.blueF(), outlineColor.alphaF());
+            glLineWidth(2.0f);
+            glPolygonMode(GL_FRONT, GL_LINE);
+            glPolygonOffset(0.8f, 0.8f);
+            glutWireCube(minVal);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         }
         break;
     }
@@ -223,11 +251,11 @@ void JShapeItemPrivate::update()
     {
         glTranslatef(pos.x(), pos.y(), pos.z());
         qreal dx = box.dx(), dy = box.dy(), dz = box.dz();
-        if (dx < 1e-3) {        // plane - y:z
+        if (dx < 1e-6) {        // plane - y:z
             dx = 1e-6;
-        } else if (dy < 1e-3) { // plane - x:z
+        } else if (dy < 1e-6) { // plane - x:z
             dy = 1e-6;
-        } else if (dz < 1e-3) { // plane - x:y
+        } else if (dz < 1e-6) { // plane - x:y
             dz = 1e-6;
         }
         qreal minVal = qMin(qMin(dx, dy), dz);
@@ -316,53 +344,53 @@ void JShapeItem::setPoint(const QVector3D &pos, qreal size)
 
 /**
  * @brief JShapeItem::setLine
- * @param minVector
- * @param maxVector
+ * @param box
  * @param width
  */
-void JShapeItem::setLine(const QVector3D &minVector, const QVector3D &maxVector, qreal width)
+void JShapeItem::setLine(const JRect3D &box, qreal width)
 {
     Q_D(JShapeItem);
-    if (minVector == maxVector) {   // point
-        setPoint(minVector);
-    } else {                        // line
-        d->shapeType = JShapeItem::ShapeLine;
-        d->lineWidth = width;
-        JGLObject::setBox(JRect3D(minVector, maxVector));
-    }
+    d->shapeType = ShapeLine;
+    d->lineWidth = width;
+    JGLObject::setBox(box);
+}
+
+/**
+ * @brief JShapeItem::setPlane
+ * @param box
+ */
+void JShapeItem::setPlane(const JRect3D &box)
+{
+    Q_D(JShapeItem);
+    d->shapeType = ShapePlane;
+    JGLObject::setBox(box);
 }
 
 /**
  * @brief JShapeItem::setBox
- * @param minVector
- * @param maxVector
+ * @param box
  */
-void JShapeItem::setBox(const QVector3D &minVector, const QVector3D &maxVector)
+void JShapeItem::setBox(const JRect3D &box)
 {
     Q_D(JShapeItem);
-
-    qreal dx = maxVector.x() - minVector.x();
-    qreal dy = maxVector.y() - minVector.y();
-    qreal dz = maxVector.z() - minVector.z();
-
-    if (dx < 0.0f || dy < 0.0f || dz < 0.0f) {
-        return ;    // invalid box
-    } else if (dx < 1e-3 && dy < 1e-3 && dz < 1e-3) {   // point
-        setPoint(minVector);
-    } else if ((dx < 1e-3 && dy < 1e-3) ||  // line - z
-               (dy < 1e-3 && dz < 1e-3) ||  // line - x
-               (dz < 1e-3 && dx < 1e-3)) {  // line - y)
-        setLine(minVector, maxVector);
-    } else {
-        if (dx < 1e-3 ||    // plane - y:z
-            dy < 1e-3 ||    // plane - z:x
-            dz < 1e-3) {    // plane - x:y
-            d->shapeType = JShapeItem::ShapePlane;
-        } else {            // box
-            d->shapeType = JShapeItem::ShapeBox;
-        }
-
-        JGLObject::setBox(JRect3D(minVector, maxVector));
+    switch (box.type()) {
+    case JRect3D::Invalid:
+        break;
+    case JRect3D::Point:
+        setPoint(box.minVector());
+        break;
+    case JRect3D::Line:
+        setLine(box);
+        break;
+    case JRect3D::Plane:
+        setPlane(box);
+        break;
+    case JRect3D::Box:
+        d->shapeType = ShapeBox;
+        JGLObject::setBox(box);
+        break;
+    default:
+        break;
     }
 }
 

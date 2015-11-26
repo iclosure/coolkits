@@ -64,6 +64,7 @@ private:
 
 private:
     QVector3D scale;
+    QVector3D interval;
     bool autoScale;
     std::vector<qreal> mantissi;
 };
@@ -347,6 +348,16 @@ bool JGLScale::autoScale() const
 }
 
 /**
+ * @brief JGLScale::interval
+ * @return
+ */
+QVector3D JGLScale::interval() const
+{
+    Q_D(const JGLScale);
+    return d->interval;
+}
+
+/**
  * @brief JGLScale::resetRange
  */
 void JGLScale::resetRange()
@@ -366,15 +377,19 @@ JRect3D JGLScale::normalized(const JRect3D &box)
     m.push_back(2);
     m.push_back(5);
 
-    JRect3D range = box;
-    JGLScalePrivate::autoScaled(range(0, 0), range(1, 0), range.left(), range.right(), 5, m);
-    JGLScalePrivate::autoScaled(range(0, 1), range(1, 1), range.floor(), range.ceil(), 5, m);
-    JGLScalePrivate::autoScaled(range(0, 2), range(1, 2), range.back(), range.front(), 5, m);
+    qreal left = box.left(), floor = box.floor(), back = box.back();
+    qreal right = box.right(), ceil = box.ceil(), front = box.front();
+
+    JGLScalePrivate::autoScaled(left, right, left, right, 5, m);
+    JGLScalePrivate::autoScaled(floor, ceil, floor, ceil, 5, m);
+    JGLScalePrivate::autoScaled(back, front, back, front, 5, m);
+
+    JRect3D range(left, floor, back, right - left, ceil - floor, front - back);
 
     qreal dx = range.dx(), dy = range.dy(), dz = range.dz();
-    QVector3D factor(qIsNull(dx) ? 1.0f : 1.0f / dx,
-                     qIsNull(dy) ? 1.0f : 1.0f / dy,
-                     qIsNull(dz) ? 1.0f : 1.0f / dz);
+    QVector3D factor(qIsNull(dx) ? 1. : 1. / dx,
+                     qIsNull(dy) ? 1. : 1. / dy,
+                     qIsNull(dz) ? 1. : 1. / dz);
 
     return (box + range.minVector()) * factor;
 }
@@ -402,6 +417,19 @@ void JGLScale::setAutoScale(bool value)
 }
 
 /**
+ * @brief JGLScale::setInterval
+ * @param value
+ */
+void JGLScale::setInterval(const QVector3D &value)
+{
+    Q_D(JGLScale);
+    if (value != d->interval) {
+        d->interval = value;
+        Q_EMIT intervalChanged(value);
+    }
+}
+
+/**
  * @brief JGLScale::setRange
  * @param value
  * @param animation
@@ -414,19 +442,26 @@ void JGLScale::setRange(const JRect3D &value, bool animation)
     }
 
     if (value != box()) {
-        JRect3D range = value;
-        d->autoScaled(range(0, 0), range(1, 0), range.left(), range.right(), 5);
-        d->autoScaled(range(0, 1), range(1, 1), range.floor(), range.ceil(), 5);
-        d->autoScaled(range(0, 2), range(1, 2), range.back(), range.front(), 5);
+
+        qreal left = value.left(), floor = value.floor(), back = value.back();
+        qreal right = value.right(), ceil = value.ceil(), front = value.front();
+
+        QVector3D interval;
+        interval.setX(d->autoScaled(left, right, left, right, 5));
+        interval.setY(d->autoScaled(floor, ceil, floor, ceil, 5));
+        interval.setZ(d->autoScaled(back, front, back, front, 5));
+
+        JRect3D range(left, floor, back, right - left, ceil - floor, front - back);
 
         qreal dx = range.dx(), dy = range.dy(), dz = range.dz();
-        QVector3D factor(qIsNull(dx) ? 1.0f : 1.0f / dx,
-                         qIsNull(dy) ? 1.0f : 1.0f / dy,
-                         qIsNull(dz) ? 1.0f : 1.0f / dz);
-
+        QVector3D factor(qFuzzyIsNull(dx) ? 1. : 1. / dx,
+                         qFuzzyIsNull(dy) ? 1. : 1. / dy,
+                         qFuzzyIsNull(dz) ? 1. : 1. / dz);
         setBox(range);
         setOffsetVector(-range.minVector(), animation);
         setScaleVector(factor, animation);
+        setInterval(interval);
+        // qDebug() << "range:" << range << ", offset:" << offsetVector() << ", scale:" << scaleVector();
     }
 }
 

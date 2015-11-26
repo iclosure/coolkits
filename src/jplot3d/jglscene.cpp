@@ -6,6 +6,7 @@
 #include "jglindicator.h"
 #include "jgltrackball.h"
 #include "jglanimation.h"
+#include "jplot3d_marker.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -27,6 +28,7 @@ public:
         , inited(false)
         , options(JGLScene::CameraNavigation)
         , panning(false)
+        , moved(false)
         , pressedObject(0)
         , pressedButton(Qt::NoButton)
         , enteredObject(0)
@@ -95,6 +97,7 @@ private:
     bool inited;
     JGLScene::Options options;
     bool panning;
+    bool moved;
     QMap<unsigned int, JGLObject *> registerObjects;
     JGLObject *pressedObject;
     Qt::MouseButton pressedButton;
@@ -107,6 +110,8 @@ private:
     qreal depth;
     int wheelDelta;
     GLdouble fovy, aspect, zNear, zFar;
+    JMarker *jmarker;
+    QGraphicsProxyWidget *jmarkerProxy;
     JGLTrackBall *trackBall;
     JGLIndicator *jindicator;
     bool indicatorDrawable;
@@ -140,18 +145,26 @@ void JGLScenePrivate::init()
     trackBall = new JGLTrackBall(0.0f, QVector3D(0.0f, 1.0f, 0.0f), JGLTrackBall::Sphere, q);
     trackBall->setRotation(defaultRotation());
 
+    // marker
+    jmarker = new JMarker(q);
+    jmarker->setVisible(false);
+    jmarkerProxy = q->addWidget(jmarker);
+    jmarkerProxy->setPalette(QColor(0, 0, 0, 0));
+
     // indicator
     jindicator = new JGLIndicator(5, q->height() - 5, 80, 80, q);
     jindicator->setRotation(trackBall->rotation());
+    q->addItem(jindicator);
 
     //
-    q->addItem(jindicator);
     QObject::connect(trackBall, SIGNAL(offsetChanged(QVector3D)),
                      q, SLOT(update()), Qt::QueuedConnection);
     QObject::connect(trackBall, SIGNAL(centerChanged(QVector3D)),
                      q, SLOT(update()), Qt::QueuedConnection);
     QObject::connect(trackBall, SIGNAL(rotationChanged(QQuaternion)),
                      q, SLOT(update()), Qt::QueuedConnection);
+    QObject::connect(jmarker, SIGNAL(textChanged(QString)),
+                     q, SLOT(_emit_sceneRectChanged()));
     // animation - scales
     animationScale = new JPropertyAnimation(q, "scale", q);
     animationScale->setRange(defaultScale(), defaultScale());
@@ -172,10 +185,12 @@ void JGLScenePrivate::setLight0()
 
     static const GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 0.7f };
     static const GLfloat mat_shininess[] = { 50.0f };
-    static const GLfloat light_position[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    static const GLfloat white_light[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    static const GLfloat lmodel_ambient[] = { 0.1f, 0.1f, 0.1f, 0.9f };
+    static const GLfloat light_position[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    //static const GLfloat white_light[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    //static const GLfloat lmodel_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
     //static const GLfloat mat_emission[] = { 0.3f, 0.2f, 0.2f, 1.0f };
+
+    glEnable(GL_LIGHT0);
 
     glPushMatrix();
     glRotatef(30.0f, 0.0f, 5.0f, 0.0f);
@@ -184,9 +199,10 @@ void JGLScenePrivate::setLight0()
 
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, white_light);
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+    //glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
+    //glLightfv(GL_LIGHT0, GL_AMBIENT, white_light);
+    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
 
     //glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_emission);
     //glColor4f(0.2f, 0.2f, 0.2f, 0.7f);
@@ -198,17 +214,18 @@ void JGLScenePrivate::setLight0()
  */
 void JGLScenePrivate::setLight1()
 {
-    static const GLfloat lightDir[] = { 0.0f, 1.0f, 0.0f, 0.0f };
-    //static const GLfloat lightColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    static const GLfloat lightDir[] = { 0.0f, 0.0f, 1.0f, 0.0f };
+    static const GLfloat lightColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
     glEnable(GL_LIGHT1);
 
+    glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
     glLightfv(GL_LIGHT1, GL_POSITION, lightDir);
-    //glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor);
-    //glLightfv(GL_LIGHT1, GL_AMBIENT, lightColor);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, lightColor);
     //glLightfv(GL_LIGHT1, GL_SPECULAR, lightColor);
     //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+    //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     //glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
 }
 
@@ -775,6 +792,16 @@ void JGLScene::setIndicatorDrawable(bool value)
 }
 
 /**
+ * @brief JGLScene::jmarker
+ * @return
+ */
+JMarker *JGLScene::jmarker() const
+{
+    Q_D(const JGLScene);
+    return d->jmarker;
+}
+
+/**
  * @brief JGLScene::jindicator
  * @return
  */
@@ -812,6 +839,18 @@ const QMap<unsigned int, JGLObject *> &JGLScene::registerObjects() const
 {
     Q_D(const JGLScene);
     return d->registerObjects;
+}
+
+/**
+ * @brief JGLScene::_emit_sceneRectChanged
+ */
+void JGLScene::_emit_sceneRectChanged()
+{
+    Q_D(JGLScene);
+    if (d->jmarker->isVisible()) {
+        d->jmarker->move(width() - d->jmarker->sizeHint().width() - 3,
+                         height() - d->jmarker->sizeHint().height() - 3);
+    }
 }
 
 /**
@@ -907,6 +946,8 @@ void JGLScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
         QApplication::setOverrideCursor(Qt::ClosedHandCursor);
 #endif
     }
+
+    d->moved = false;
 
     JGLObject *object = 0;
     if (!d->panning && (d->options & JGLScene::ObjectPicking)) {
@@ -1009,6 +1050,9 @@ void JGLScene::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
     }
 
     Q_D(JGLScene);
+
+    d->moved = true;
+
     if (e->buttons() & Qt::LeftButton) {
         d->lastPan = e->scenePos();
         d->trackBall->move(JGLFunction::pixelPosToViewPos(sceneRect(), e->scenePos()));

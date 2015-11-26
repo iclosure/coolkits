@@ -62,7 +62,10 @@ void JScenePrivate::init()
     //
     QObject::connect(jcoord, SIGNAL(repaint()), q, SLOT(update()));
     QObject::connect(jscale, SIGNAL(boxChanged(JRect3D)),
-                     jcoord, SLOT(setBox(JRect3D)));/*
+                     jcoord, SLOT(setBox(JRect3D)));
+    QObject::connect(jscale, SIGNAL(intervalChanged(QVector3D)),
+                     jcoord, SLOT(setInterval(QVector3D)));
+    /*
     //TEST
     QWidget *dialog = new QWidget(0, Qt::FramelessWindowHint);
     //dialog->setAttribute(Qt::WA_TranslucentBackground);

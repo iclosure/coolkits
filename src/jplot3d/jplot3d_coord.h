@@ -29,6 +29,7 @@ class J3D_EXPORT JCoord : public JGLObject
     Q_PROPERTY(bool tickMinorDrawable READ tickMinorDrawable WRITE setTickMinorDrawable NOTIFY tickMinorDrawableChanged)
     Q_PROPERTY(LineHints lineHints READ lineHints WRITE setLineHints NOTIFY lineHintsChanged)
     Q_PROPERTY(SideHints sideHints READ sideHints WRITE setSideHints NOTIFY sideHintsChanged)
+    Q_PROPERTY(QVector3D interval READ interval WRITE setInterval NOTIFY intervalChanged)
 public:
     explicit JCoord(QObject *parent = 0);
     virtual ~JCoord();
@@ -56,6 +57,7 @@ public:
     bool tickMinorDrawable() const;
     J3D::LineHints lineHints() const;
     J3D::SideHints sideHints() const;
+    QVector3D interval() const;
 
     void setLineWidth(qreal value, qreal majorFactor, qreal minorFactor);
     void setTickLength(qreal major, qreal minor);
@@ -83,6 +85,7 @@ Q_SIGNALS:
     void tickMinorDrawableChanged(bool);
     void lineHintsChanged(J3D::LineHints);
     void sideHintsChanged(J3D::SideHints);
+    void intervalChanged(const QVector3D &);
 
 public Q_SLOTS:
     void setGridColor(const QColor &value);
@@ -98,6 +101,7 @@ public Q_SLOTS:
     void setLineHints(J3D::LineHints value);
     void setSideHint(J3D::SideHint hint, bool enable);
     void setSideHints(J3D::SideHints value);
+    void setInterval(const QVector3D &value);
 
 private:
     Q_DISABLE_COPY(JCoord)

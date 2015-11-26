@@ -42,6 +42,7 @@ HEADERS += \
     jplot3d_coord.h \
     jplot3d_floor.h \
     jplot3d_shadow.h \
+    jplot3d_marker.h \
     jplot3d_global.h \
     jplot3d_inc.h
 
@@ -69,6 +70,7 @@ SOURCES += \
     jplot3d_control.cpp \
     jplot3d_coord.cpp \
     jplot3d_floor.cpp \
+    jplot3d_marker.cpp \
     jplot3d_shadow.cpp \
     jplot3d_global.cpp
 

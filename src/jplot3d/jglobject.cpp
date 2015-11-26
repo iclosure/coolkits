@@ -33,6 +33,7 @@ public:
         , focusable(false)
         , pickable(false)
         , picking(false)
+        , outlineEnabled(false)
         , box(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f)
         , offsetVector(0.0f, 0.0f, 0.0f)
         , scaleVector(1.0f, 1.0f, 1.0f)
@@ -65,12 +66,15 @@ private:
     bool focusable;
     bool pickable;
     bool picking;
+    bool outlineEnabled;
     JRect3D box;
     QVector3D offsetVector;
     QVector3D scaleVector;
 
     unsigned int glListId;
     static unsigned int indexOfObjectId;
+
+    QMap<int, QVariant> datas;
 
     JPropertyAnimation *animationPos;
     JPropertyAnimation *animationColor;
@@ -412,6 +416,16 @@ bool JGLObject::picking() const
 }
 
 /**
+ * @brief JGLObject::outlineEnabled
+ * @return
+ */
+bool JGLObject::outlineEnabled() const
+{
+    Q_D(const JGLObject);
+    return d->outlineEnabled;
+}
+
+/**
  * @brief JGLObject::setPicking
  * @param value
  */
@@ -421,6 +435,20 @@ void JGLObject::setPicking(bool value)
     if (value != d->picking) {
         d->picking = value;
         Q_EMIT pickingChanged(value);
+        update();
+    }
+}
+
+/**
+ * @brief JGLObject::setOutlineEnabled
+ * @param value
+ */
+void JGLObject::setOutlineEnabled(bool value)
+{
+    Q_D(JGLObject);
+    if (value != d->outlineEnabled) {
+        d->outlineEnabled = value;
+        Q_EMIT outlineEnabledChanged(value);
         update();
     }
 }
@@ -552,6 +580,32 @@ bool JGLObject::doneContext()
 }
 
 /**
+ * @brief JGLObject::data
+ * @param role
+ * @return
+ */
+QVariant JGLObject::data(int role) const
+{
+    Q_D(const JGLObject);
+    if (d->datas.contains(role)) {
+        return d->datas[role];
+    } else {
+        return QVariant::Invalid;
+    }
+}
+
+/**
+ * @brief JGLObject::setData
+ * @param value
+ * @param role
+ */
+void JGLObject::setData(const QVariant &value, int role)
+{
+    Q_D(JGLObject);
+    d->datas[role] = value;
+}
+
+/**
  * @brief JGLObject::initialize
  * @param scene
  */
@@ -662,15 +716,28 @@ bool JGLObject::event(QEvent *e)
     case QEvent::MouseButtonPress:
     {
         QMouseEvent *mouseEvent = reinterpret_cast<QMouseEvent *>(e);
-        if (mouseEvent->button() == Qt::LeftButton) {
+        switch (mouseEvent->button()) {
+        case Qt::LeftButton:
             Q_EMIT pressed();
+            break;
+        case Qt::RightButton:
+            Q_EMIT pressed();
+            if (d->picking) {
+                QApplication::restoreOverrideCursor();
+                Q_EMIT rightPressed();
+            }
+            break;
+        default:
+            break;
         }
         break;
     }
     case QEvent::MouseButtonRelease:
     {
+        QApplication::restoreOverrideCursor();
         QMouseEvent *mouseEvent = reinterpret_cast<QMouseEvent *>(e);
-        if (mouseEvent->button() == Qt::LeftButton) {
+        switch (mouseEvent->button()) {
+        case Qt::LeftButton:
             Q_EMIT released();
             if (mouseEvent->x() >= 0) {
                 if (d->pickable) {
@@ -678,6 +745,17 @@ bool JGLObject::event(QEvent *e)
                 }
                 Q_EMIT clicked();
             }
+            break;
+        case Qt::RightButton:
+            Q_EMIT released();
+            if (mouseEvent->x() == 0) {
+                if (d->picking) {
+                    Q_EMIT rightClicked();
+                }
+            }
+            break;
+        default:
+            break;
         }
         break;
     }

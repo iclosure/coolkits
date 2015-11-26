@@ -35,6 +35,7 @@ class J3D_EXPORT JGLObject : public QObject
     Q_PROPERTY(bool focusable READ focusable WRITE setFocusable NOTIFY focusableChanged)
     Q_PROPERTY(bool pickable READ pickable WRITE setPickable NOTIFY pickableChanged)
     Q_PROPERTY(bool picking READ picking WRITE setPicking NOTIFY pickingChanged)
+    Q_PROPERTY(bool outlineEnabled READ outlineEnabled WRITE setOutlineEnabled NOTIFY outlineEnabledChanged)
     Q_PROPERTY(JRect3D box READ box WRITE setBox NOTIFY boxChanged)
     Q_PROPERTY(QVector3D offsetVector READ offsetVector WRITE setOffsetVector NOTIFY offsetVectorChanged)
     Q_PROPERTY(QVector3D scaleVector READ scaleVector WRITE setScaleVector NOTIFY scaleVectorChanged)
@@ -58,6 +59,7 @@ public:
     bool focusable() const;
     bool pickable() const;
     bool picking() const;
+    bool outlineEnabled() const;
 
     bool isDirty() const;
     void setDirty();
@@ -79,6 +81,9 @@ public:
     bool beginContext();
     bool doneContext();
 
+    QVariant data(int role = Qt::UserRole + 1) const;
+    void setData(const QVariant &value, int role = Qt::UserRole + 1);
+
 public:
     virtual void initialize(JGLScene *scene);
     virtual void draw(JGLPainter *painter);
@@ -96,6 +101,8 @@ Q_SIGNALS:
     void doubleClicked();
     void entered();
     void left();
+    void rightPressed();
+    void rightClicked();
 
     void identityChanged(const QString &);
     void posChanged(const QVector3D &);
@@ -106,6 +113,7 @@ Q_SIGNALS:
     void focusableChanged(bool);
     void pickableChanged(bool);
     void pickingChanged(bool);
+    void outlineEnabledChanged(bool);
 
     void boxChanged(const JRect3D &);
     void offsetVectorChanged(const QVector3D &);
@@ -121,6 +129,7 @@ public Q_SLOTS:
     void setFocusable(bool value);
     void setPickable(bool value);
     void setPicking(bool value);
+    void setOutlineEnabled(bool value);
 
     void setBox(const JRect3D &value);
     void setOffsetVector(const QVector3D &value, bool animation = false);

@@ -4,6 +4,7 @@
 #include "jplot3d_global.h"
 #include <QGraphicsScene>
 #include <QVector3D>
+#include "jplot3d_marker.h"
 
 QT_BEGIN_HEADER
 
@@ -66,6 +67,7 @@ public:
     bool indicatorDrawable() const;
     void setIndicatorDrawable(bool value);
 
+    JMarker *jmarker() const;
     QGraphicsItem *jindicator() const;
 
     QGLWidget *viewport() const;
@@ -117,6 +119,9 @@ public Q_SLOTS:
 protected:
     const QList<JGLObject *> &objects() const;
     const QMap<unsigned int, JGLObject *> &registerObjects() const;
+
+private Q_SLOTS:
+    void _emit_sceneRectChanged();
 
 private:
     Q_DISABLE_COPY(JGLScene)

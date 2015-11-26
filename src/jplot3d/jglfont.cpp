@@ -190,7 +190,7 @@ void JGLFont::drawText2D(const QString &text)
 #if defined(Q_OS_MAC) && (QT_VERSION >= 0x050000)
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text.at(i).toLatin1());
 #else
-        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, text.at(i).toLatin1());
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, text.at(i).toLatin1());
 #endif
     }
 #endif

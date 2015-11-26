@@ -18,6 +18,7 @@ class J3D_EXPORT JGLScale : public JGLObject
 {
     Q_OBJECT
     Q_PROPERTY(bool autoScale READ autoScale WRITE setAutoScale NOTIFY autoScaleChanged)
+    Q_PROPERTY(QVector3D interval READ interval WRITE setInterval NOTIFY intervalChanged)
 public:
     JGLScale(QObject *parent = 0);
     virtual ~JGLScale();
@@ -25,6 +26,7 @@ public:
     virtual void draw(JGLPainter *painter);
 
     bool autoScale() const;
+    QVector3D interval() const;
 
     void resetRange();
 
@@ -35,9 +37,11 @@ protected:
 
 Q_SIGNALS:
     void autoScaleChanged(bool);
+    void intervalChanged(const QVector3D &);
 
 public Q_SLOTS:
     void setAutoScale(bool value);
+    void setInterval(const QVector3D &value);
     void setRange(const JRect3D &value, bool animation = false);
 
 private:

@@ -78,6 +78,7 @@ void JShapePrivate::bind(JShapeItem *item)
         jwidget->registerObject(item->objectId(), item);
         item->setViewport(jwidget);
     }
+    //
     QObject::connect(item, SIGNAL(repaint()),
                      jobject, SLOT(update()));
     QObject::connect(jscale, SIGNAL(offsetVectorChanged(QVector3D)),
@@ -88,16 +89,27 @@ void JShapePrivate::bind(JShapeItem *item)
                      item, SLOT(setScaleVector(QVector3D)));
     QObject::connect(q, SIGNAL(focusableChanged(bool)),
                      item, SLOT(setFocusable(bool)));
+    QObject::connect(q, SIGNAL(outlineEnabledChanged(bool)),
+                     item, SLOT(setOutlineEnabled(bool)));
+    //
+    QObject::connect(item, SIGNAL(colorChanged(QColor)),
+                     q, SLOT(_emit_itemColorChanged(QColor)), Qt::QueuedConnection);
     QObject::connect(item, SIGNAL(pressed()),
-                     q, SLOT(objectPressed()));
+                     q, SLOT(_emit_itemPressed()), Qt::QueuedConnection);
     QObject::connect(item, SIGNAL(clicked()),
-                     q, SLOT(objectClicked()));
+                     q, SLOT(_emit_itemClicked()), Qt::QueuedConnection);
+    QObject::connect(item, SIGNAL(released()),
+                     q, SLOT(_emit_itemReleased()), Qt::QueuedConnection);
     QObject::connect(item, SIGNAL(doubleClicked()),
-                     q, SLOT(objectDoubleClicked()));
+                     q, SLOT(_emit_itemDoubleClicked()), Qt::QueuedConnection);
     QObject::connect(item, SIGNAL(entered()),
-                     q, SLOT(objectEntered()));
+                     q, SLOT(_emit_itemEntered()), Qt::QueuedConnection);
     QObject::connect(item, SIGNAL(left()),
-                     q, SLOT(objectLeft()));
+                     q, SLOT(_emit_itemLeft()), Qt::QueuedConnection);
+    QObject::connect(item, SIGNAL(rightPressed()),
+                     q, SLOT(_emit_itemRightPressed()), Qt::QueuedConnection);
+    QObject::connect(item, SIGNAL(rightClicked()),
+                     q, SLOT(_emit_itemRightClicked()), Qt::QueuedConnection);
 }
 
 /**
@@ -123,15 +135,15 @@ void JShapePrivate::unbind(JShapeItem *item)
     QObject::disconnect(q, SIGNAL(focusableChanged(bool)),
                         item, SLOT(setFocusable(bool)));
     QObject::disconnect(item, SIGNAL(pressed()),
-                        q, SLOT(objectPressed()));
+                        q, SLOT(_emit_itemPressed()));
     QObject::disconnect(item, SIGNAL(clicked()),
-                        q, SLOT(objectClicked()));
+                        q, SLOT(_emit_itemClicked()));
     QObject::disconnect(item, SIGNAL(doubleClicked()),
-                        q, SLOT(objectDoubleClicked()));
+                        q, SLOT(_emit_itemDoubleClicked()));
     QObject::disconnect(item, SIGNAL(entered()),
-                        q, SLOT(objectEntered()));
+                        q, SLOT(_emit_itemEntered()));
     QObject::disconnect(item, SIGNAL(left()),
-                        q, SLOT(objectLeft()));
+                        q, SLOT(_emit_itemLeft()));
 }
 
 /**
@@ -215,67 +227,102 @@ JShape::~JShape()
  * @param pos
  * @param color
  * @param size
+ * @return
  */
-void JShape::addPoint(const QString &identity, const QVector3D &pos, const QColor &color, qreal size)
+JShapeItem *JShape::addPoint(const QString &identity, const QVector3D &pos,
+                      const QColor &color, qreal size)
 {
     Q_D(JShape);
     if (!d->jobject) {
-        return;
+        return 0;
     }
 
     JShapeItem *item = new JShapeItem(identity, color, this);
     item->setFocusable(focusable());
     item->setPickable(pickable());
+    item->setOutlineEnabled(outlineEnabled());
     item->setScaleVector(scaleVector());
     item->setPoint(pos, size);
     d->addShape(item);
+
+    return item;
 }
 
 /**
  * @brief JShape::addLine
  * @param identity
- * @param minVector
- * @param maxVector
+ * @param box
  * @param color
  * @param width
+ * @return
  */
-void JShape::addLine(const QString &identity, const QVector3D &minVector,
-                     const QVector3D &maxVector, const QColor &color, qreal width)
+JShapeItem *JShape::addLine(const QString &identity, const JRect3D &box,
+                     const QColor &color, qreal width)
 {
     Q_D(JShape);
     if (!d->jobject) {
-        return;
+        return 0;
     }
 
     JShapeItem *item = new JShapeItem(identity, color, this);
     item->setFocusable(focusable());
     item->setPickable(pickable());
+    item->setOutlineEnabled(outlineEnabled());
     item->setScaleVector(scaleVector());
-    item->setLine(minVector, maxVector, width);
+    item->setLine(box, width);
     d->addShape(item);
+
+    return item;
+}
+
+/**
+ * @brief JShape::addPlane
+ * @param identity
+ * @param box
+ * @param color
+ * @return
+ */
+JShapeItem *JShape::addPlane(const QString &identity, const JRect3D &box, const QColor &color)
+{
+    Q_D(JShape);
+    if (!d->jobject) {
+        return 0;
+    }
+
+    JShapeItem *item = new JShapeItem(identity, color, this);
+    item->setFocusable(focusable());
+    item->setPickable(pickable());
+    item->setOutlineEnabled(outlineEnabled());
+    item->setScaleVector(scaleVector());
+    item->setPlane(box);
+    d->addShape(item);
+
+    return item;
 }
 
 /**
  * @brief JShape::addBox
  * @param identity
- * @param minVector
- * @param maxVector
+ * @param box
  * @param color
+ * @return
  */
-void JShape::addBox(const QString &identity, const QVector3D &minVector,
-                    const QVector3D &maxVector, const QColor &color)
+JShapeItem *JShape::addBox(const QString &identity, const JRect3D &box, const QColor &color)
 {
     Q_D(JShape);
     if (!d->jobject) {
-        return;
+        return 0;
     }
 
     JShapeItem *item = new JShapeItem(identity, color, this);
     item->setFocusable(focusable());
     item->setPickable(pickable());
+    item->setOutlineEnabled(outlineEnabled());
     item->setScaleVector(scaleVector());
-    item->setBox(minVector, maxVector);
+    item->setBox(box);
     d->addShape(item);
+
+    return item;
 }
 
 /**
@@ -286,45 +333,53 @@ void JShape::addBox(const QString &identity, const QVector3D &minVector,
  * @param color
  * @param slices
  * @param stacks
+ * @return
  */
-void JShape::addCircle(const QString &identity, const QVector3D &pos, qreal radius,
+JShapeItem *JShape::addCircle(const QString &identity, const QVector3D &pos, qreal radius,
                        const QColor &color, int slices, int stacks)
 {
     Q_D(JShape);
     if (!d->jobject) {
-        return;
+        return 0;
     }
 
     JShapeItem *item = new JShapeItem(identity, color, this);
     item->setFocusable(focusable());
     item->setPickable(pickable());
+    item->setOutlineEnabled(outlineEnabled());
     item->setScaleVector(scaleVector());
     item->setCircle(pos, radius, slices, stacks);
     d->addShape(item);
+
+    return item;
 }
 
 /**
- * @brief JShape::setEllipse
+ * @brief JShape::addEllipse
  * @param identity
  * @param box
  * @param color
  * @param slices
  * @param stacks
+ * @return
  */
-void JShape::setEllipse(const QString &identity, const JRect3D &box,
+JShapeItem *JShape::addEllipse(const QString &identity, const JRect3D &box,
                        const QColor &color, int slices, int stacks)
 {
     Q_D(JShape);
     if (!d->jobject) {
-        return;
+        return 0;
     }
 
     JShapeItem *item = new JShapeItem(identity, color, this);
     item->setFocusable(focusable());
     item->setPickable(pickable());
+    item->setOutlineEnabled(outlineEnabled());
     item->setScaleVector(scaleVector());
     item->setEllipse(box, slices, stacks);
     d->addShape(item);
+
+    return item;
 }
 
 /**
@@ -340,8 +395,6 @@ JShapeItem *JShape::findShape(unsigned int objectId) const
     } else {
         return 0;
     }
-
-    return 0;
 }
 
 /**
@@ -404,7 +457,30 @@ void JShape::clearShape()
     if (!d->jobject) {
         return;
     }
+
     d->clearShape();
+
+    //
+    if (d->jscene) {
+        d->jscene->jmarker()->setText("");
+    }
+}
+
+/**
+ * @brief JShape::shapes
+ * @return
+ */
+QList<JShapeItem *> JShape::shapes() const
+{
+    Q_D(const JShape);
+    QList<JShapeItem *> items;
+    QMapIterator<unsigned int, JShapeItem *> iter(d->shapes);
+    while (iter.hasNext()) {
+        iter.next();
+        items.append(iter.value());
+    }
+
+    return items;
 }
 
 /**
@@ -469,7 +545,7 @@ void JShape::setCurrentShape(JShapeItem *item)
 
         item->setPicking(true);
         d->pickedShape = item;
-        Q_EMIT currentShapeChanged(item->identity());
+        Q_EMIT currentItemChanged(item->identity());
     }
 }
 
@@ -526,6 +602,8 @@ void JShape::attach(QObject *object)
                      this, SLOT(sceneDoubleClicked()));
     QObject::connect(d->jscale, SIGNAL(scaleVectorChanged(QVector3D)),
                      this, SLOT(setScaleVector(QVector3D)));
+    QObject::connect(d->jscale, SIGNAL(scaleVectorChanged(QVector3D)),
+                     this, SLOT(setScaleVector(QVector3D)));
     if (d->jscene) {
         d->jscene->addObject(this);
     } else {
@@ -565,6 +643,46 @@ void JShape::detach()
 }
 
 /**
+ * @brief JShape::jscene
+ * @return
+ */
+JGLScene *JShape::jscene() const
+{
+    Q_D(const JShape);
+    return d->jscene;
+}
+
+/**
+ * @brief JShape::itemData
+ * @param identity
+ * @param role
+ * @return
+ */
+QVariant JShape::itemData(const QString &identity, int role) const
+{
+    JShapeItem *shapeItem = findShape(identity);
+    if (shapeItem) {
+        return shapeItem->data(role);
+    } else {
+        return QVariant::Invalid;
+    }
+}
+
+/**
+ * @brief JShape::setItemData
+ * @param identity
+ * @param value
+ * @param role
+ */
+void JShape::setItemData(const QString &identity, const QVariant &value, int role)
+{
+    JShapeItem *shapeItem = findShape(identity);
+    if (shapeItem) {
+        shapeItem->setData(value, role);
+    }
+}
+
+/**
  * @brief JShape::sceneDoubleClicked
  */
 void JShape::sceneDoubleClicked()
@@ -579,58 +697,119 @@ void JShape::sceneDoubleClicked()
         }
         glEnable(GL_BLEND);
         d->pickedShape = 0;
+        if (d->jscene) {
+            d->jscene->jmarker()->setText("");
+        }
+        Q_EMIT clearPicked();
     }
 }
 
 /**
- * @brief JShape::objectPressed
+ * @brief JShape::_emit_itemColorChanged
+ * @param color
  */
-void JShape::objectPressed()
+void JShape::_emit_itemColorChanged(const QColor &color)
 {
-
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemColorChanged(shapeItem->identity(), color);
 }
 
 /**
- * @brief JShape::objectClicked
+ * @brief JShape::_emit_itemPressed
  */
-void JShape::objectClicked()
+void JShape::_emit_itemPressed()
 {
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemPressed(shapeItem->identity());
+}
+
+/**
+ * @brief JShape::_emit_itemClicked
+ */
+void JShape::_emit_itemClicked()
+{
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemClicked(shapeItem->identity());
     if (pickable()) {
-        JShapeItem *item = qobject_cast<JShapeItem *>(sender());
-        setCurrentShape(item);
+        setCurrentShape(shapeItem);
+        //
+        Q_D(JShape);
+        if (d->jscene && d->jscene->jmarker()->isVisible()) {
+            d->jscene->jmarker()->setText(
+                        QString("ID: %1\n"
+                                "x1: %2, y1: %3, z1: %4\n"
+                                "x2: %5, y2: %6, z2: %7")
+                        .arg(shapeItem->identity())
+                        .arg(shapeItem->box().minX(), 6)
+                        .arg(shapeItem->box().minY(), 6)
+                        .arg(shapeItem->box().minZ(), 6)
+                        .arg(shapeItem->box().maxX(), 6)
+                        .arg(shapeItem->box().maxY(), 6)
+                        .arg(shapeItem->box().maxZ(), 6));
+        }
     }
 }
 
 /**
- * @brief JShape::objectReleased
+ * @brief JShape::_emit_itemReleased
  */
-void JShape::objectReleased()
+void JShape::_emit_itemReleased()
 {
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemReleased(shapeItem->identity());
+}
 
+void JShape::_emit_itemDoubleClicked()
+{
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemDoubleClicked(shapeItem->identity());
 }
 
 /**
- * @brief JShape::objectDoubleClicked
+ * @brief JShape::_emit_itemEntered
  */
-void JShape::objectDoubleClicked()
+void JShape::_emit_itemEntered()
 {
-
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemEntered(shapeItem->identity());
 }
 
 /**
- * @brief JShape::objectEntered
+ * @brief JShape::_emit_itemLeft
  */
-void JShape::objectEntered()
+void JShape::_emit_itemLeft()
 {
-
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemLeft(shapeItem->identity());
 }
 
 /**
- * @brief JShape::objectLeft
+ * @brief JShape::_emit_itemRightPressed
  */
-void JShape::objectLeft()
+void JShape::_emit_itemRightPressed()
 {
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemRightPressed(shapeItem->identity());
+}
 
+/**
+ * @brief JShape::_emit_itemRightClicked
+ */
+void JShape::_emit_itemRightClicked()
+{
+    JShapeItem *shapeItem = qobject_cast<JShapeItem *>(sender());
+    Q_EMIT itemRightClicked(shapeItem->identity());
+#if 0
+    Q_D(JShape);
+    if (d->jscene) {
+        QColorDialog colorDialog(shapeItem->color(), d->jscene->viewport());
+        if (colorDialog.exec() == QDialog::Accepted) {
+            shapeItem->setColor(colorDialog.selectedColor());
+        }
+    } else {
+
+    }
+#endif
 }
 
 QT_END_NAMESPACE

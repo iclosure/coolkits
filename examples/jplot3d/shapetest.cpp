@@ -74,7 +74,10 @@ void ShapeTest::initView(J3D::JView *jview)
         jcoord->setTickMinorDrawable(true);
         //
         jscene->jscale()->setAutoScale(true);
-
+        // jmarker
+        J3D::JMarker *jmarker = jscene->jmarker();
+        jmarker->setVisible(true);
+        //
         q_jshape1 = new J3D::JShape(jview);
         q_jshape1->setObjectName("jshape1");
         q_jshape1->setFocusable(true);
@@ -110,15 +113,14 @@ void ShapeTest::updateShape(J3D::JShape *jshape)
 
     jshape->clearShape();
     if (jshape->objectName() == "jshape1") {
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 5; ++i) {
             J3D::JRect3D box(1000 - qrand() % 2000,
                              1000 - qrand() % 2000,
                              1000 - qrand() % 2000,
-                             0.0f, 0.0f, 0.0f);
-            box.setRight(box.left() + qrand() % 1000 + 10);
-            box.setCeil(box.floor() + qrand() % 1000 + 10);
-            box.setFront(box.back() + qrand() % 1000 + 10);
-#if 0
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10);
+#if 1
             jshape->addBox(QString("box #%1").arg(i + 1), box,
                            J3D::JGLFunction::rangColor(220));
 #else
@@ -126,16 +128,27 @@ void ShapeTest::updateShape(J3D::JShape *jshape)
                               J3D::JGLFunction::rangColor(220), 50, 50);
 #endif
         }
-    } else {
-        for (int i = 0; i < 100; ++i) {
+#if 1
+        for (int i = 0; i < 10; ++i) {
             J3D::JRect3D box(1000 - qrand() % 2000,
                              1000 - qrand() % 2000,
                              1000 - qrand() % 2000,
-                             0.0f, 0.0f, 0.0f);
-            box.setRight(box.left() + qrand() % 1000 + 10);
-            box.setCeil(box.floor() + qrand() % 1000 + 10);
-            box.setFront(box.back() + qrand() % 1000 + 10);
-#if 0
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10);
+            jshape->addCircle(QString("box #%1").arg(i + 1), box.center(), (qrand() % 100) + 10,
+                              J3D::JGLFunction::rangColor(220), 50, 50);
+        }
+#endif
+    } else {
+        for (int i = 0; i < 10; ++i) {
+            J3D::JRect3D box(1000 - qrand() % 2000,
+                             1000 - qrand() % 2000,
+                             1000 - qrand() % 2000,
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10);
+#if 1
             jshape->addBox(QString("box #%1").arg(20 + i + 1), box,
                            J3D::JGLFunction::rangColor(220));
 #else
@@ -258,10 +271,9 @@ void ShapeTest2::updateShape(J3D::JShape *jshape)
             J3D::JRect3D box(1000 - qrand() % 2000,
                              1000 - qrand() % 2000,
                              1000 - qrand() % 2000,
-                             0.0f, 0.0f, 0.0f);
-            box.setRight(box.left() + qrand() % 1000 + 10);
-            box.setCeil(box.floor() + qrand() % 1000 + 10);
-            box.setFront(box.back() + qrand() % 1000 + 10);
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10);
             jshape->addBox(QString("box #%1").arg(i + 1), box,
                            J3D::JGLFunction::rangColor(220));
         }
@@ -270,10 +282,9 @@ void ShapeTest2::updateShape(J3D::JShape *jshape)
             J3D::JRect3D box(1000 - qrand() % 2000,
                              1000 - qrand() % 2000,
                              1000 - qrand() % 2000,
-                             0.0f, 0.0f, 0.0f);
-            box.setRight(box.left() + qrand() % 1000 + 10);
-            box.setCeil(box.floor() + qrand() % 1000 + 10);
-            box.setFront(box.back() + qrand() % 1000 + 10);
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10,
+                             qrand() % 1000 + 10);
             jshape->addBox(QString("box #%1").arg(20 + i + 1), box,
                            J3D::JGLFunction::rangColor(220));
         }

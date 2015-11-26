@@ -12,6 +12,83 @@ J3D_BEGIN_NAMESPACE
 
 // - class JCoordPrivate -
 
+// grid data
+
+static const GLfloat _vertex_grid_area[] =
+{
+    // left
+    1.0f, 0.0f, 0.0f,   // normalize
+    0.0f, 0.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.04f,
+    0.0f, 1.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.24f,
+    0.0f, 1.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.04f,
+    0.0f, 0.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.00f,
+    0.0f, 0.0f, 1.0f,   // reverse
+    0.0f, 1.0f, 1.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f,
+    // right
+    -1.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.04f,
+    1.0f, 1.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.24f,
+    1.0f, 1.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.04f,
+    1.0f, 0.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.00f,
+    1.0f, 0.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+    // floor
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.31f,
+    0.0f, 0.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.00f,
+    1.0f, 0.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.00f,
+    1.0f, 0.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.59f,
+    1.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 0.0f,
+    // ceil
+    0.0f, -1.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.31f,
+    0.0f, 1.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.00f,
+    1.0f, 1.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.00f,
+    1.0f, 1.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.59f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 1.0f,
+    0.0f, 1.0f, 1.0f,
+    0.0f, 1.0f, 0.0f,
+    // back
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.31f,
+    1.0f, 0.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.20f,
+    1.0f, 1.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.00f,
+    0.0f, 1.0f, 0.0f, 0.27f, 0.27f, 0.78f, 0.20f,
+    0.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f,
+    // front
+    0.0f, 0.0f, -1.0f,
+    0.0f, 0.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.31f,
+    1.0f, 0.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.20f,
+    1.0f, 1.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.00f,
+    0.0f, 1.0f, 1.0f, 0.27f, 0.27f, 0.78f, 0.20f,
+    0.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+};
+
+//
+enum VertexGridLineArea
+{
+    VertextGridAreaLeft = 0,
+    VertextGridAreaRight = 43,
+    VertextGridAreaFloor = 86,
+    VertextGridAreaCeil = 129,
+    VertextGridAreaBack = 172,
+    VertextGridAreaFront = 215,
+};
+
 /**
  * @brief The JCoordPrivate class
  */
@@ -35,11 +112,12 @@ public:
         , sideHints(defaultSideHints())
         , labelFont(QApplication::font())
         , labelColor(defaultGridColor())
-        , lineWidth(1.0f)
-        , lineMajorFactor(0.03f)
+        , lineWidth(1.f)
+        , lineMajorFactor(0.030f)
         , lineMinorFactor(0.015f)
         , tickLengthMajor(0.015f)
         , tickLengthMinor(tickLengthMajor * 0.5f)
+        , interval(5, 5, 5)
         , axesLabel(defaultAxesLabel())
         , oAxisLabel("o")
         , xAxisLabel("x")
@@ -51,18 +129,16 @@ public:
 
     static bool defaultAreaDrawable() { return true; }
     static qreal defaultVertexRadius() { return 0.008f; }
-    static QColor defaultVertexColor() { return 0x606060; }
-    static QColor defaultGridColor() { return QColor(150, 150, 170, 240); }
-    static QColor defaultTextColor() { return QColor(220, 220, 220, 255); }
+    static QColor defaultVertexColor() { return QColor(150, 150, 150, 255); }
+    static QColor defaultGridColor() { return QColor(128, 128, 128, 255); }
+    static QColor defaultTextColor() { return QColor(180, 180, 180, 255); }
     static qreal defaultGridSpacing() { return 0.1f; }
     static J3D::LineHints defaultLineHints() { return J3D::MajorLines; }
     static J3D::SideHints defaultSideHints() { return J3D::MajorSides; }
     static JCoord::Axes3D defaultAxesLabel() { return JCoord::AllAxes; }
 
     qreal scaledValue(qreal delta, qreal value, qreal e = 1e-4)
-    {
-        return (qFabs(delta) >= 1.0f && qFabs(value) < e) ? 0.0f : value;
-    }
+    { return (qFabs(delta) >= 1.0f && qFabs(value) < e) ? 0.0f : value; }
 
 private:
     void init();
@@ -72,7 +148,7 @@ private:
     void genGridLists();
     void genTickList();
     void createGridSideList(const QVector<QVector3D> &vertexes);
-    void createGridSideAreaList(const QVector<QVector4D> &colors, const QVector<QVector3D> &vertexes);
+    void createGridSideAreaList(const GLfloat *vertexes);
 
 private:
     bool areaDrawable;
@@ -92,8 +168,11 @@ private:
     QColor labelColor;
     qreal lineWidth, lineMajorFactor, lineMinorFactor;
     qreal tickLengthMajor, tickLengthMinor;
+    QVector3D interval;
     JCoord::Axes3D axesLabel;
     QString oAxisLabel, xAxisLabel, yAxisLabel, zAxisLabel;
+
+    GLuint gridListId;
 };
 
 /**
@@ -128,7 +207,7 @@ void JCoordPrivate::update()
     //
     genCoordList();
     //
-    if (tickDrawable) {
+    if (tickDrawable && (tickMajorDrawable || tickMinorDrawable)) {
         genTickList();
     }
     //
@@ -204,164 +283,156 @@ void JCoordPrivate::genCoordList()
 }
 
 /**
- * @brief JCoordPrivate::genTickList
- */
-void JCoordPrivate::genTickList()
-{
-    QVector<QVector3D> vertexes;
-    int majorCount = (int)(1.0f / gridSpacing);
-    for (int i = 0; i <= majorCount; ++i) {
-        qreal major = (i + 1) * gridSpacing;
-        if (tickMajorDrawable) {
-            vertexes << QVector3D(major, 0.0f, 0.0f) << QVector3D(major, -tickLengthMajor, -tickLengthMajor)    // x
-                     << QVector3D(0.0f, major, 0.0f) << QVector3D(-tickLengthMajor, major, -tickLengthMajor)    // y
-                     << QVector3D(0.0f, 0.0f, major) << QVector3D(-tickLengthMajor, -tickLengthMajor, major);   // z
-        }
-        if (tickMinorDrawable) {
-            for (int j = 1; j < 5; ++j) {
-                qreal minor = i * gridSpacing + j * gridSpacing / 5.0f;
-                vertexes << QVector3D(minor, 0.0f, 0.0f) << QVector3D(minor, -tickLengthMinor, -tickLengthMinor)    // x
-                         << QVector3D(0.0f, minor, 0.0f) << QVector3D(-tickLengthMinor, minor, -tickLengthMinor)    // y
-                         << QVector3D(0.0f, 0.0f, minor) << QVector3D(-tickLengthMinor, -tickLengthMinor, minor);   // z
-            }
-        }
-    }
-
-    if (vertexes.isEmpty()) {
-        return;
-    }
-
-    glLineWidth(1.0f);
-    glColor4f(labelColor.redF(), labelColor.greenF(),
-              labelColor.blueF(), labelColor.alphaF());
-    glVertexPointer(3, GL_FLOAT, 0, vertexes.data());
-    glDrawArrays(GL_LINES, 0, vertexes.count());
-}
-
-/**
  * @brief JCoordPrivate::genGridLists
  */
 void JCoordPrivate::genGridLists()
 {
-    // left side
-    if (sideHints & J3D::LeftSide) {
-        QVector<QVector3D> vertexes;
-        for (GLfloat i = gridSpacing; i <= 1.0f + gridSpacing / 2.0f; i += gridSpacing) {
-            vertexes << QVector3D(0.0f, i, 0.0f) << QVector3D(0.0f, i, 1.0f)
-                     << QVector3D(0.0f, 0.0f, i) << QVector3D(0.0f, 1.0f, i);
+    QVector3D step = QVector3D(1./interval.x(), 1./interval.y(), 1./interval.z());
+    int xInterval = (int)interval.x(), yInterval = (int)interval.y(), zInterval = (int)interval.z();
+    qreal major = 0.;
+    QVector<QVector3D> vertexes;
+
+    /// grid
+
+    // x
+    for (int i = 1; i <= xInterval; ++i) {
+        major = step.x() * i;
+        if (sideHints & J3D::FloorSide) {
+            vertexes << QVector3D(major, 0.0f, 0.0f) << QVector3D(major, 0.0f, 1.0f);   // x-z: x
         }
-        createGridSideList(vertexes);
-        if (areaDrawable) {
-            QVector<QVector4D> colors;
-            vertexes.clear();
-            vertexes << QVector3D(0.0f, 0.0f, 0.0f) << QVector3D(0.0f, 1.0f, 0.0f)
-                     << QVector3D(0.0f, 1.0f, 1.0f) << QVector3D(0.0f, 0.0f, 1.0f);
-            colors << QVector4D(0.27f, 0.27f, 0.78f, 0.04f) << QVector4D(0.27f, 0.27f, 0.78f, 0.24f)
-                   << QVector4D(0.27f, 0.27f, 0.78f, 0.04f) << QVector4D(0.27f, 0.27f, 0.78f, 0.00f);
-            createGridSideAreaList(colors, vertexes);
+        if (sideHints & J3D::CeilSide) {
+            vertexes << QVector3D(major, 1.0f, 0.0f) << QVector3D(major, 1.0f, 1.0f);   // x-z: x
         }
-    }
-    // right side
-    if (sideHints & J3D::RightSide) {
-        QVector<QVector3D> vertexes;
-        for (GLfloat i = gridSpacing; i <= 1.0f + gridSpacing / 2.0f; i += gridSpacing) {
-            vertexes << QVector3D(1.0f, i, 0.0f) << QVector3D(1.0f, i, 1.0f)
-                     << QVector3D(1.0f, 0.0f, i) << QVector3D(1.0f, 1.0f, i);
+        if (sideHints & J3D::BackSide) {
+            vertexes << QVector3D(major, 0.0f, 0.0f) << QVector3D(major, 1.0f, 0.0f);   // x-y: x
         }
-        createGridSideList(vertexes);
-        if (areaDrawable) {
-            QVector<QVector4D> colors;
-            vertexes.clear();
-            vertexes << QVector3D(1.0f, 0.0f, 0.0f) << QVector3D(1.0f, 1.0f, 0.0f)
-                     << QVector3D(1.0f, 1.0f, 1.0f) << QVector3D(1.0f, 0.0f, 1.0f);
-            colors << QVector4D(0.27f, 0.27f, 0.78f, 0.04f) << QVector4D(0.27f, 0.27f, 0.78f, 0.24f)
-                   << QVector4D(0.27f, 0.27f, 0.78f, 0.04f) << QVector4D(0.27f, 0.27f, 0.78f, 0.00f);
-            createGridSideAreaList(colors, vertexes);
-        }
-    } else if (lineHints & J3D::RightLine) {
-        QVector<QVector3D> vertexes;
-        vertexes << QVector3D(1.0f, 1.0f, 0.0f) << QVector3D(1.0f, 1.0f, 1.0f);
-        createGridSideList(vertexes);
-    }
-    // floor side
-    if (sideHints & J3D::FloorSide) {
-        QVector<QVector3D> vertexes;
-        for (GLfloat i = gridSpacing; i <= 1.0f + gridSpacing / 2.0f; i += gridSpacing) {
-            vertexes << QVector3D(i, 0.0f, 0.0f) << QVector3D(i, 0.0f, 1.0f)
-                     << QVector3D(0.0f, 0.0f, i) << QVector3D(1.0f, 0.0f, i);
-        }
-        createGridSideList(vertexes);
-        if (areaDrawable) {
-            QVector<QVector4D> colors;
-            vertexes.clear();
-            vertexes << QVector3D(0.0f, 0.0f, 0.0f) << QVector3D(0.0f, 0.0f, 1.0f)
-                     << QVector3D(1.0f, 0.0f, 1.0f) << QVector3D(1.0f, 0.0f, 0.0f);
-            colors << QVector4D(0.27f, 0.27f, 0.78f, 0.31f) << QVector4D(0.27f, 0.27f, 0.78f, 0.00f)
-                   << QVector4D(0.27f, 0.27f, 0.78f, 0.00f) << QVector4D(0.27f, 0.27f, 0.78f, 0.59f);
-            createGridSideAreaList(colors, vertexes);
+        if (sideHints & J3D::FrontSide) {
+            vertexes << QVector3D(major, 0.0f, 1.0f) << QVector3D(major, 1.0f, 1.0f);   // x-y: x
         }
     }
-    // ceil side
-    if (sideHints & J3D::CeilSide) {
-        QVector<QVector3D> vertexes;
-        for (GLfloat i = gridSpacing; i <= 1.0f + gridSpacing / 2.0f; i += gridSpacing) {
-            vertexes << QVector3D(i, 1.0f, 0.0f) << QVector3D(i, 1.0f, 1.0f)
-                     << QVector3D(0.0f, 1.0f, i) << QVector3D(1.0f, 1.0f, i);
+
+    // y
+    for (int i = 1; i <= yInterval; ++i) {
+        major = step.y() * i;
+        if (sideHints & J3D::LeftSide) {
+            vertexes << QVector3D(0.0f, major, 0.0f) << QVector3D(0.0f, major, 1.0f);   // y-z: y
         }
-        createGridSideList(vertexes);
-        if (areaDrawable) {
-            QVector<QVector4D> colors;
-            vertexes.clear();
-            vertexes << QVector3D(0.0f, 1.0f, 0.0f) << QVector3D(0.0f, 1.0f, 1.0f)
-                     << QVector3D(1.0f, 1.0f, 1.0f) << QVector3D(1.0f, 1.0f, 0.0f);
-            colors << QVector4D(0.27f, 0.27f, 0.78f, 0.31f) << QVector4D(0.27f, 0.27f, 0.78f, 0.00f)
-                   << QVector4D(0.27f, 0.27f, 0.78f, 0.00f) << QVector4D(0.27f, 0.27f, 0.78f, 0.59f);
-            createGridSideAreaList(colors, vertexes);
+        if (sideHints & J3D::RightSide) {
+            vertexes << QVector3D(1.0f, major, 0.0f) << QVector3D(1.0f, major, 1.0f);   // y-z: y
         }
-    } else if (lineHints & J3D::CeilLine) {
-        QVector<QVector3D> vertexes;
-        vertexes << QVector3D(1.0f, 0.0f, 1.0f) << QVector3D(1.0f, 1.0f, 1.0f);
-        createGridSideList(vertexes);
-    }
-    // back side
-    if (sideHints & J3D::BackSide) {
-        QVector<QVector3D> vertexes;
-        for (GLfloat i = gridSpacing; i <= 1.0f + gridSpacing / 2.0f; i += gridSpacing) {
-            vertexes << QVector3D(i, 0.0f, 0.0f) << QVector3D(i, 1.0f, 0.0f)
-                     << QVector3D(0.0f, i, 0.0f) << QVector3D(1.0f, i, 0.0f);
+        if (sideHints & J3D::BackSide) {
+            vertexes << QVector3D(0.0f, major, 0.0f) << QVector3D(1.0f, major, 0.0f);   // x-y: y
         }
-        createGridSideList(vertexes);
-        if (areaDrawable) {
-            QVector<QVector4D> colors;
-            vertexes.clear();
-            vertexes << QVector3D(0.0f, 0.0f, 0.0f) << QVector3D(1.0f, 0.0f, 0.0f)
-                     << QVector3D(1.0f, 1.0f, 0.0f) << QVector3D(0.0f, 1.0f, 0.0f);
-            colors << QVector4D(0.27f, 0.27f, 0.78f, 0.31f) << QVector4D(0.27f, 0.27f, 0.78f, 0.20f)
-                   << QVector4D(0.27f, 0.27f, 0.78f, 0.00f) << QVector4D(0.27f, 0.27f, 0.78f, 0.20f);
-            createGridSideAreaList(colors, vertexes);
+        if (sideHints & J3D::FrontSide) {
+            vertexes << QVector3D(0.0f, major, 1.0f) << QVector3D(1.0f, major, 1.0f);   // x-y: y
         }
     }
-    // front side
-    if (sideHints & J3D::FrontSide) {
-        QVector<QVector3D> vertexes;
-        for (GLfloat i = 0.1f; i <= 1.0f + gridSpacing / 2.0f; i += gridSpacing) {
-            vertexes << QVector3D(i, 0.0f, 1.0f) << QVector3D(i, 1.0f, 1.0f)
-                     << QVector3D(0.0f, i, 1.0f) << QVector3D(1.0f, i, 1.0f);
+
+    // z
+    for (int i = 1; i <= zInterval; ++i) {
+        major = step.z() * i;
+        if (sideHints & J3D::LeftSide) {
+            vertexes << QVector3D(0.0f, 0.0f, major) << QVector3D(0.0f, 1.0f, major);   // y-z: z
         }
-        createGridSideList(vertexes);
-        if (areaDrawable) {
-            QVector<QVector4D> colors;
-            vertexes.clear();
-            vertexes << QVector3D(0.0f, 0.0f, 1.0f) << QVector3D(1.0f, 0.0f, 1.0f)
-                     << QVector3D(1.0f, 1.0f, 1.0f) << QVector3D(0.0f, 1.0f, 1.0f);
-            colors << QVector4D(0.27f, 0.27f, 0.78f, 0.31f) << QVector4D(0.27f, 0.27f, 0.78f, 0.20f)
-                   << QVector4D(0.27f, 0.27f, 0.78f, 0.00f) << QVector4D(0.27f, 0.27f, 0.78f, 0.20f);
-            createGridSideAreaList(colors, vertexes);
+        if (sideHints & J3D::RightSide) {
+            vertexes << QVector3D(1.0f, 0.0f, major) << QVector3D(1.0f, 1.0f, major);   // y-z: z
         }
-    } else if (lineHints & J3D::FrontLine) {
-        QVector<QVector3D> vertexes;
-        vertexes << QVector3D(0.0f, 1.0f, 1.0f) << QVector3D(1.0f, 1.0f, 1.0f);
+        if (sideHints & J3D::FloorSide) {
+            vertexes << QVector3D(0.0f, 0.0f, major) << QVector3D(1.0f, 0.0f, major);   // x-z: z
+        }
+        if (sideHints & J3D::CeilSide) {
+            vertexes << QVector3D(0.0f, 1.0f, major) << QVector3D(1.0f, 1.0f, major);   // x-z: z
+        }
+    }
+
+    /// edge
+
+    // left
+    if ((sideHints & J3D::LeftSide) == 0 && (lineHints & J3D::LeftLine)) {
+        if ((sideHints & J3D::CeilSide) == 0) {
+            vertexes << QVector3D(0.0f, 1.0f, 0.0f) << QVector3D(0.0f, 1.0f, 1.0f);
+        }
+        if ((sideHints & J3D::FrontSide) == 0) {
+            vertexes << QVector3D(0.0f, 0.0f, 1.0f) << QVector3D(0.0f, 1.0f, 1.0f);
+        }
+    }
+    // right
+    if ((sideHints & J3D::RightSide) == 0 && (lineHints & J3D::RightLine)) {
+        if ((sideHints & J3D::CeilSide) == 0) {
+            vertexes << QVector3D(1.0f, 1.0f, 0.0f) << QVector3D(1.0f, 1.0f, 1.0f);
+        }
+        if ((sideHints & J3D::FrontSide) == 0) {
+            vertexes << QVector3D(1.0f, 0.0f, 1.0f) << QVector3D(1.0f, 1.0f, 1.0f);
+        }
+    }
+    // floor
+    if ((sideHints & J3D::FloorSide) == 0 && (lineHints & J3D::FloorLine)) {
+        if ((sideHints & J3D::RightSide) == 0) {
+            vertexes << QVector3D(1.0f, 0.0f, 0.0f) << QVector3D(1.0f, 0.0f, 1.0f);
+        }
+        if ((sideHints & J3D::FrontSide) == 0) {
+            vertexes << QVector3D(0.0f, 0.0f, 1.0f) << QVector3D(1.0f, 0.0f, 1.0f);
+        }
+    }
+    // ceil
+    if ((sideHints & J3D::CeilSide) == 0 && (lineHints & J3D::CeilLine)) {
+        if ((sideHints & J3D::RightSide) == 0) {
+            vertexes << QVector3D(1.0f, 1.0f, 0.0f) << QVector3D(1.0f, 1.0f, 1.0f);
+        }
+        if ((sideHints & J3D::FrontSide) == 0) {
+            vertexes << QVector3D(0.0f, 1.0f, 1.0f) << QVector3D(1.0f, 1.0f, 1.0f);
+        }
+    }
+    // back
+    if ((sideHints & J3D::BackSide) == 0 && (lineHints & J3D::BackLine)) {
+        if ((sideHints & J3D::CeilSide) == 0) {
+            vertexes << QVector3D(0.0f, 1.0f, 0.0f) << QVector3D(1.0f, 1.0f, 0.0f);
+        }
+        if ((sideHints & J3D::RightSide) == 0) {
+            vertexes << QVector3D(1.0f, 0.0f, 0.0f) << QVector3D(1.0f, 1.0f, 0.0f);
+        }
+    }
+    // front
+    if ((sideHints & J3D::FrontSide) == 0 && (lineHints & J3D::FrontLine)) {
+        if ((sideHints & J3D::CeilSide) == 0) {
+            vertexes << QVector3D(0.0f, 1.0f, 1.0f) << QVector3D(1.0f, 1.0f, 1.0f);
+        }
+        if ((sideHints & J3D::RightSide) == 0) {
+            vertexes << QVector3D(1.0f, 0.0f, 1.0f) << QVector3D(1.0f, 1.0f, 1.0f);
+        }
+    }
+
+    if (!vertexes.isEmpty()) {
         createGridSideList(vertexes);
+    }
+
+    /// area
+
+    if (areaDrawable) {
+        // left side
+        if (sideHints & J3D::LeftSide) {
+            createGridSideAreaList(&_vertex_grid_area[VertextGridAreaLeft]);
+        }
+        // right side
+        if (sideHints & J3D::RightSide) {
+            createGridSideAreaList(&_vertex_grid_area[VertextGridAreaRight]);
+        }
+        // floor side
+        if (sideHints & J3D::FloorSide) {
+            createGridSideAreaList(&_vertex_grid_area[VertextGridAreaFloor]);
+        }
+        // ceil side
+        if (sideHints & J3D::CeilSide) {
+            createGridSideAreaList(&_vertex_grid_area[VertextGridAreaCeil]);
+        }
+        // back side
+        if (sideHints & J3D::BackSide) {
+            createGridSideAreaList(&_vertex_grid_area[VertextGridAreaBack]);
+        }
+        // front side
+        if (sideHints & J3D::FrontSide) {
+            createGridSideAreaList(&_vertex_grid_area[VertextGridAreaFront]);
+        }
     }
 }
 
@@ -371,40 +442,91 @@ void JCoordPrivate::genGridLists()
  */
 void JCoordPrivate::createGridSideList(const QVector<QVector3D> &vertexes)
 {
-    glColor4f(gridColor.redF(), gridColor.greenF(), gridColor.blueF(), 0.1f);
-    glPushAttrib(GL_LINE_BIT);
-    glLineWidth(0.5f);
-    glVertexPointer(3, GL_FLOAT, 0, vertexes.data());
+    glLineWidth(0.1f);
+    glColor4f(gridColor.redF(), gridColor.greenF(), gridColor.blueF(), 0.2f);
+    glVertexPointer(3, GL_FLOAT, 0, vertexes.constData());
     glDrawArrays(GL_LINES, 0, vertexes.count());
-    glPopAttrib();
 }
 
 /**
  * @brief JCoordPrivate::createGridSideAreaList
- * @param colors
  * @param vertexes
  */
-void JCoordPrivate::createGridSideAreaList(const QVector<QVector4D> &colors, const QVector<QVector3D> &vertexes)
+void JCoordPrivate::createGridSideAreaList(const GLfloat *vertexes)
 {
     glEnableClientState(GL_COLOR_ARRAY);
-
     glPushAttrib(GL_DEPTH_BITS);
     glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glVertexPointer(3, GL_FLOAT, 0, vertexes.data());
-    glColorPointer(4, GL_FLOAT, 0, colors.data());
-    glDrawArrays(GL_QUADS, 0, vertexes.count());
-
-    QVector<QVector3D> v = vertexes;
-    std::reverse(v.begin(), v.end());
-    glVertexPointer(3, GL_FLOAT, 0, v.data());
-    glDrawArrays(GL_QUADS, 0, v.count());
-
+    glNormal3fv(vertexes);
+    glVertexPointer(3, GL_FLOAT, 7 * sizeof(GLfloat), &vertexes[3]);
+    glColorPointer(4, GL_FLOAT, 7 * sizeof(GLfloat), &vertexes[6]);
+    glDrawArrays(GL_QUADS, 0, 4);   // positive
+    glVertexPointer(3, GL_FLOAT, 0, &vertexes[31]);
+    glDrawArrays(GL_QUADS, 0, 4);   // negative
     glPopAttrib();
-
     glDisableClientState(GL_COLOR_ARRAY);
+}
+
+/**
+ * @brief JCoordPrivate::genTickList
+ */
+void JCoordPrivate::genTickList()
+{
+    QVector3D step = QVector3D(1./interval.x(), 1./interval.y(), 1./interval.z());
+    int xInterval = (int)interval.x(), yInterval = (int)interval.y(), zInterval = (int)interval.z();
+    qreal major = 0., minor = 0.;
+    QVector<QVector3D> vertexes;
+
+    // x
+    for (int i = 0; i < xInterval; ++i) {
+        major = (i + 1) * step.x();
+        if (tickMajorDrawable) {
+            vertexes << QVector3D(major, 0.0f, 0.0f) << QVector3D(major, -tickLengthMajor, -tickLengthMajor);
+        }
+        if (tickMinorDrawable) {
+            for (int j = 1; j < 5; ++j) {
+                minor = major - step.x() + j * step.x() / 5.0f;
+                vertexes << QVector3D(minor, 0.0f, 0.0f) << QVector3D(minor, -tickLengthMinor, -tickLengthMinor);
+            }
+        }
+    }
+
+    // y
+    for (int i = 0; i < yInterval; ++i) {
+        major = (i + 1) * step.y();
+        if (tickMajorDrawable) {
+            vertexes << QVector3D(0.0f, major, 0.0f) << QVector3D(-tickLengthMajor, major, -tickLengthMajor);
+        }
+        if (tickMinorDrawable) {
+            for (int j = 1; j < 5; ++j) {
+                minor = major - step.y() + j * step.y() / 5.0f;
+                vertexes << QVector3D(0.0f, minor, 0.0f) << QVector3D(-tickLengthMinor, minor, -tickLengthMinor);
+            }
+        }
+    }
+
+    // z
+    for (int i = 0; i < zInterval; ++i) {
+        major = (i + 1) * step.z();
+        if (tickMajorDrawable) {
+            vertexes << QVector3D(0.0f, 0.0f, major) << QVector3D(-tickLengthMajor, -tickLengthMajor, major);
+        }
+        if (tickMinorDrawable) {
+            for (int j = 1; j < 5; ++j) {
+                minor = major - step.z() + j * step.z() / 5.0f;
+                vertexes << QVector3D(0.0f, 0.0f, minor) << QVector3D(-tickLengthMinor, -tickLengthMinor, minor);
+            }
+        }
+    }
+
+    if (vertexes.isEmpty()) {
+        return;
+    }
+
+    glLineWidth(1.0f);
+    glColor4f(labelColor.redF(), labelColor.greenF(), labelColor.blueF(), labelColor.alphaF());
+    glVertexPointer(3, GL_FLOAT, 0, vertexes.constData());
+    glDrawArrays(GL_LINES, 0, vertexes.count());
 }
 
 J3D_END_NAMESPACE
@@ -768,6 +890,16 @@ SideHints JCoord::sideHints() const
 }
 
 /**
+ * @brief JCoord::interval
+ * @return
+ */
+QVector3D JCoord::interval() const
+{
+    Q_D(const JCoord);
+    return d->interval;
+}
+
+/**
  * @brief JCoord::setSideHint
  * @param hint
  * @param enable
@@ -800,26 +932,39 @@ void JCoord::draw(JGLPainter *painter)
         JGLObject::draw(painter);
         //
         if (d->tickMajorDrawable) {
-            int majorCount = (int)(1.0f / (d->gridSpacing * 2));
             JGLFont::instance()->setFont(QFont("Courier New", 15, QFont::Normal));
             glColor4f(d->textColor.redF(), d->textColor.greenF(),
                       d->textColor.blueF(), d->textColor.alphaF());
-            qreal dx = box().dx(), dy = box().dy(), dz = box().dz();
-            for (int i = 0; i <= majorCount; ++i) {
-                qreal major = (i + 1) * (d->gridSpacing * 2);
-                if (!qIsNull(dx)) {
+
+            QVector3D step = QVector3D(1./d->interval.x(), 1./d->interval.y(), 1./d->interval.z());
+            int xInterval = (int)d->interval.x();
+            int yInterval = (int)d->interval.y();
+            int zInterval = (int)d->interval.z();
+            qreal major = 0.;
+
+            JRect3D box = this->box();
+            qreal dx = box.dx(), dy = box.dy(), dz = box.dz();
+            if (/*qIsNull(dx)*/true) {
+                for (int i = 1; i <= xInterval; ++i) {
+                    major = i * step.x();
                     JGLFont::instance()->drawText2D(QString("%1")
-                                                    .arg(d->scaledValue(dx, box().left() + dx * major)),
+                                                    .arg(d->scaledValue(dx, box.left() + dx * major)),
                                                     QVector3D(major, -0.03f, -0.03f));
                 }
-                if (!qIsNull(dy)) {
+            }
+            if (/*qIsNull(dy)*/true) {
+                for (int i = 1; i <= yInterval; ++i) {
+                    major = i * step.y();
                     JGLFont::instance()->drawText2D(QString("%1")
-                                                    .arg(d->scaledValue(dy, box().floor() + dy * major)),
+                                                    .arg(d->scaledValue(dy, box.floor() + dy * major)),
                                                     QVector3D(-0.03f, major, -0.03f));
                 }
-                if (!qIsNull(dz)) {
+            }
+            if (/*qIsNull(dz)*/true) {
+                for (int i = 1; i <= zInterval; ++i) {
+                    major = i * step.z();
                     JGLFont::instance()->drawText2D(QString("%1")
-                                                    .arg(d->scaledValue(dz, box().back() + dz * major)),
+                                                    .arg(d->scaledValue(dz, box.back() + dz * major)),
                                                     QVector3D(-0.03f, -0.03f, major));
                 }
             }
@@ -870,6 +1015,7 @@ void JCoord::setGridColor(const QColor &value)
     Q_D(JCoord);
     if (value != d->gridColor) {
         d->gridColor = value;
+        Q_EMIT gridColorChanged(value);
         update();
     }
 }
@@ -883,6 +1029,7 @@ void JCoord::setTextColor(const QColor &value)
     Q_D(JCoord);
     if (value != d->textColor) {
         d->textColor = value;
+        Q_EMIT textColorChanged(value);
         update();
     }
 }
@@ -896,6 +1043,7 @@ void JCoord::setLabelFont(const QFont &value)
     Q_D(JCoord);
     if (value != d->labelFont) {
         d->labelFont = value;
+        Q_EMIT labelFontChanged(value);
         update();
     }
 }
@@ -909,6 +1057,7 @@ void JCoord::setLabelColor(const QColor &value)
     Q_D(JCoord);
     if (value != d->labelColor) {
         d->labelColor = value;
+        Q_EMIT labelColorChanged(value);
         update();
     }
 }
@@ -922,6 +1071,17 @@ void JCoord::setSideHints(J3D::SideHints value)
     Q_D(JCoord);
     if (value != d->sideHints) {
         d->sideHints = value;
+        Q_EMIT sideHintsChanged(value);
+        update();
+    }
+}
+
+void JCoord::setInterval(const QVector3D &value)
+{
+    Q_D(JCoord);
+    if (value != d->interval) {
+        d->interval = value;
+        Q_EMIT intervalChanged(value);
         update();
     }
 }
