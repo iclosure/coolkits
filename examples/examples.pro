@@ -6,5 +6,4 @@
 
 TEMPLATE = subdirs
 SUBDIRS += \
-#    plot3d \
     jplot3d
