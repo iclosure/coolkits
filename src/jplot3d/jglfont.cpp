@@ -1,4 +1,4 @@
-#include "precomp.h"
+﻿#include "precomp.h"
 #include "jglfont.h"
 #include "jglfunction.h"
 

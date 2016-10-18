@@ -6,4 +6,5 @@
 
 TEMPLATE = subdirs
 SUBDIRS += \
-    jplot3d
+#    jplot3d \
+    jecharts

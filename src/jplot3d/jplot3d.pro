@@ -62,7 +62,7 @@ win32 {
 } else: macx: {
     DEFINES -= Q_CC_CLANG
     CONFIG += qt_framework
-    QT += network declarative
+    QT += network
 #    LIBS += -framework Qt3D \
 #            -framework Qt3DQuick \
 #            -framework glut

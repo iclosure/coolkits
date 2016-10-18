@@ -43,7 +43,7 @@ win32: {
     INCLUDEPATH += \
         $${J3D_ROOT}/src/jplot3d
 } else: mac: {
-    QT += network declarative
+    QT += network
     LIBS += \
         -framework JPlot3D -F$${J3D_ROOT}/bin \
         -framework glut

@@ -72,7 +72,9 @@ glUnmapBuffer
 # endif
 #else
 # define APIENTRY
-# define APIENTRYP *
+#ifndef APIENTRYP
+# define APIENTRYP APIENTRY *
+#endif
 #endif
 
 #ifndef GL_VERSION_1_2

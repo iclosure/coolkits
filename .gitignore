@@ -28,9 +28,10 @@
 *.app
 
 # Expands
-bin
-lib
-temp
+/bin
+/lib
+/include
+/temp
 Makefile
 *.user*
 .qmake.stash
