@@ -6,9 +6,9 @@
 
 QT += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets charts
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets charts webview webenginewidgets
 
-THIS_DIR = $$PWD/../..
+THIS_DIR = $$PWD/../../
 
 TEMPLATE = lib
 win32 {
@@ -18,6 +18,7 @@ win32 {
 }
 
 DESTDIR = $${THIS_DIR}/bin
+#DESTDIR = $${THIS_DIR}/lib
 
 CONFIG += dll warn_on lib_bundle
 #CONFIG += no_keywords silent
@@ -58,10 +59,9 @@ win32 {
     CONFIG += qt_framework
     QT += network
 #    LIBS +=
-    LIBS += -framework
 } else: unix {
     CONFIG += dll
-    LIBS +=
+    #
 }
 
 ##################################################
@@ -70,11 +70,9 @@ win32 {
 # Mac OS X - Xcode, Makefile, Unix - gcc 3.3 and up)
 ##################################################
 
-win32 {
-    CONFIG += precompile_header
-    PRECOMPILED_HEADER = $$PWD/precomp.h
-    INCLUDEPATH += $$PWD
-}
+CONFIG += precompile_header
+PRECOMPILED_HEADER = $$PWD/precomp.h
+INCLUDEPATH += $$PWD
 
 ##
 include($$PWD/src/src.pri)
@@ -91,7 +89,13 @@ RESOURCES += \
 # global commands
 ###############################################################
 
-win32|unix: {
+macx:CONFIG(qt_framework, qt_framework|qt_no_framework) {
+    QMAKE_LFLAGS_SONAME = -Wl,-install_name,$$DESTDIR/
+    CONFIG += lib_bundle
+    QMAKE_BUNDLE_DATA += \
+        framework_headers_echarts \
+        framework_headers_stepchart
+} else:win32|unix: {
     commands += echo --- console - $$TARGET --- &
 
     excludefile = $$PWD/copy.ignore
@@ -110,12 +114,4 @@ win32|unix: {
     unix:commands += "\"$$THIS_DIR/tools/xcopy.py\"" "\"$$srcdir\"" "\"$$dstdir\"" "*.h" &
 
     QMAKE_POST_LINK += $$commands
-
-} else:macx:CONFIG(qt_framework, qt_framework|qt_no_framework) {
-    QMAKE_LFLAGS_SONAME = -Wl,-install_name,$$DESTDIR/
-    CONFIG += lib_bundle
-    FRAMEWORK_HEADERS.version = Versions
-    FRAMEWORK_HEADERS.path = Headers
-    FRAMEWORK_HEADERS.files = $$PUBLIC_HEADERS
-    QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS
 }

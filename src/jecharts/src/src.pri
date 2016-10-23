@@ -8,13 +8,23 @@
 # Resouces
 ################################################################
 
-HEADERS += \
+include($$PWD/stepchart/stepchart.pri)
+
+jecharts_headers += \
+    $$PWD/jchart.h \
+    $$PWD/jchartview.h \
     $$PWD/jecharts_global.h \
     $$PWD/jecharts_inc.h
 
+HEADERS += \
+    $$jecharts_headers
+
 SOURCES += \
+    $$PWD/jchart.cpp \
+    $$PWD/jchartview.cpp \
     $$PWD/jecharts_global.cpp
 
-##
-
-PUBLIC_HEADERS += $$HEADERS
+#
+framework_headers_echarts.version = Versions
+framework_headers_echarts.path = Headers
+framework_headers_echarts.files = $$jecharts_headers

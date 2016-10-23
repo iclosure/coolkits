@@ -1,0 +1,127 @@
+<!DOCTYPE html >
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 12px;
+        }
+
+        #main {
+            height: 100%;
+        }
+    </style>
+    <script type="text/javascript" src="./js/qwebchannel.js"></script>
+    <script>
+        var channel;
+        channel = new QWebChannel(qt.webChannelTransport, function (channel) {
+            window.bridge = channel.objects.bridge;
+        });
+
+        function onShowMsgBox() {
+            if (bridge) {
+                bridge.showMsgBox()
+            }
+        }
+
+        function showAlert() {
+            alert('this is web alert');
+        }
+    </script>
+</head>
+
+<body onresize="onWindowResize();">
+    <div id="main"></div>
+    <script type="text/javascript" src="./js/echarts/echarts.js"></script>
+
+    <script type="text/javascript">
+        var myChart;
+        window.onload = function() {
+            myChart = echarts.init(document.getElementById("main"))
+            myChart.setOption({
+                backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+                    offset: 0,
+                    color: '#f7f8fa'
+                }, {
+                    offset: 1,
+                    color: '#cdd0d5'
+                }]),
+                title: {
+                    text: 'Step Line'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['Step Start', 'Step Middle', 'Step End']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                textStyle: {
+                    fontSize: 12
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    axisLabel: {
+                        textStyle: {
+                            fontSize: 12
+                        },
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        textStyle: {
+                            fontSize: 12
+                        },
+                    }
+                },
+                series: [{
+                    name: 'Step Start',
+                    type: 'line',
+                    step: 'end',
+                    data: [1, 0, 1, 0, 0, 1, 0]
+                }, {
+                    name: 'Step Middle',
+                    type: 'line',
+                    step: 'end',
+                    data: [3, 2, 2, 3, 3, 2, 3]
+                }, {
+                    name: 'Step End',
+                    type: 'line',
+                    step: 'end',
+                    data: [5, 4, 5, 5, 5, 4, 5]
+                }],
+                animation: true,
+                animationDuration: 200,
+                animationDurationUpdate: 500
+            })
+        }
+
+        function onWindowResize() {
+            myChart.resize(window.innerWidth, window.innerHeight)
+        }
+    </script>
+
+</body>
+
+</html>

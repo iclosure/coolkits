@@ -41,8 +41,8 @@ win32: {
         LIBS += -L$${THIS_DIR}/bin -ljecharts
     }
     INCLUDEPATH += \
-        $${THIS_DIR}/src/jecharts
-} else: mac: {
+        $${THIS_DIR}/src/jecharts/src
+} else:macx: {
     QT += network
     LIBS += \
         -framework jecharts -F$${THIS_DIR}/bin
@@ -50,16 +50,18 @@ win32: {
     INCLUDEPATH += \
         $${THIS_DIR}/bin/jecharts.framework/Versions/Current/Headers
 
-} else: unix {
+} else:unix {
     LIBS += \
-            -L$${THIS_DIR}/bin -ljecharts
+        -L$${THIS_DIR}/bin -ljecharts
 
     INCLUDEPATH += \
-        $${THIS_DIR}/src/jecharts
+        $${THIS_DIR}/src/jecharts/src
 
 }
 
-HEADERS +=
+HEADERS += \
+    chartview.h
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    chartview.cpp

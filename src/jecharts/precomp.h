@@ -25,6 +25,18 @@
 #include <QtCharts>
 #endif
 
+#ifdef QT_WEBVIEW_LIB
+#include <QtWebView>
+#endif
+
+#ifdef QT_WEBENGINE_LIB
+#include <QtWebEngine>
+#endif
+
+#ifdef QT_WEBENGINEWIDGETS_LIB
+#include <QtWebEngineWidgets>
+#endif
+
 #ifdef QT_OPENGL_LIB
 #include <QtOpenGL>
 

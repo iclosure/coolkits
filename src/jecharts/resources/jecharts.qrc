@@ -1,3 +1,19 @@
 <RCC>
     <qresource prefix="/coolkits/jecharts/image"/>
+    <qresource prefix="/coolkits/jecharts/html/js/echarts">
+        <file alias="echarts.min.js">html/js/echarts/echarts.min.js</file>
+        <file alias="china.js">html/js/echarts/china.js</file>
+        <file alias="echarts.js">html/js/echarts/echarts.js</file>
+        <file alias="world.js">html/js/echarts/world.js</file>
+    </qresource>
+    <qresource prefix="/coolkits/jecharts/html">
+        <file alias="stepchart.html">html/stepchart.html</file>
+        <file alias="stepchart1.html">html/stepchart1.html</file>
+        <file alias="stepchart2.html">html/stepchart2.html</file>
+    </qresource>
+    <qresource prefix="/coolkits/jecharts/html/js">
+        <file alias="require.js">html/js/require.js</file>
+        <file alias="jquery-3.1.1.min.js">html/js/jquery-3.1.1.min.js</file>
+        <file alias="qwebchannel.js">html/js/qwebchannel.js</file>
+    </qresource>
 </RCC>

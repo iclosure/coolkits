@@ -1,6 +1,7 @@
 
 #include <QApplication>
 #include <QDateTime>
+#include "chartview.h"
 
 int main(int argc, char **argv)
 {
@@ -12,12 +13,9 @@ int main(int argc, char **argv)
 
     qsrand(QDateTime::currentDateTime().toTime_t());
 
-#if 1
-    //ShapeTest shapeTest;
-#else
-    ShapeTest2 shapeTest;
-#endif
-    //shapeTest.showMaximized();
+    ChartView chartView;
+    chartView.resize(1024, 650);
+    chartView.show();
 
     return app.exec();
 }
