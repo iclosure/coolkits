@@ -6,7 +6,7 @@
 
 QT += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets charts webview webenginewidgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webview webenginewidgets
 
 THIS_DIR = $$PWD/../../
 

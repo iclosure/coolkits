@@ -1,16 +1,12 @@
 ﻿#include "precomp.h"
 #include "jstepchart_p.h"
-#include "../jstepchart.h"
-#include <QWebEngineView>
-#include <QWebChannel>
+#include "../../jecharts_option.h"
 
 namespace JEcharts {
 
 JStepChartPrivate::JStepChartPrivate(JStepChart *q)
     : QObject(q)
     , q_ptr(q)
-    , view(0)
-    , channel(0)
 {
 
 }
@@ -18,20 +14,19 @@ JStepChartPrivate::JStepChartPrivate(JStepChart *q)
 void JStepChartPrivate::init()
 {
     Q_Q(JStepChart);
-
-    QHBoxLayout *horiLayoutMain = new QHBoxLayout(q);
-    horiLayoutMain->setContentsMargins(0, 0, 0, 0);
-
-    view = new QWebEngineView(q);
-    horiLayoutMain->addWidget(view);
-
-    channel = new QWebChannel(q);
-    view->page()->setWebChannel(channel);
+    connect(q->view(), SIGNAL(loadFinished(bool)), this, SLOT(onLoadFinished(bool)));
 }
 
 void JStepChartPrivate::load()
 {
-    view->load(QUrl("qrc:/coolkits/jecharts/html/stepchart.html"));
+    Q_Q(JStepChart);
+    q->view()->setUrl(QUrl("qrc:/coolkits/jecharts/html/stepchart.html"));
+}
+
+void JStepChartPrivate::onLoadFinished(bool loaded)
+{
+    Q_UNUSED(loaded);
+    //Q_Q(JStepChart);
 }
 
 } // end of namespace JEcharts

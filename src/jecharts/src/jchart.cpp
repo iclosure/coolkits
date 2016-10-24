@@ -1,5 +1,6 @@
 ﻿#include "precomp.h"
 #include "jchart.h"
+#include "jecharts_option.h"
 
 namespace JEcharts {
 
@@ -18,11 +19,26 @@ public:
 
 private:
     J_DECLARE_PUBLIC(JChart)
+    QWebEngineView *view;
+    QWebChannel *channel;
+    JEchartsOption *option;
 };
 
 void JChartPrivate::init()
 {
+    Q_Q(JChart);
 
+    QHBoxLayout *horiLayoutMain = new QHBoxLayout(q);
+    horiLayoutMain->setContentsMargins(0, 0, 0, 0);
+
+    view = new QWebEngineView(q);
+    horiLayoutMain->addWidget(view);
+
+    channel = new QWebChannel(q);
+    view->page()->setWebChannel(channel);
+
+    option = new JEchartsOption(q);
+    channel->registerObject(QStringLiteral("option"), option);
 }
 
 // class JChart
@@ -39,6 +55,24 @@ JChart::~JChart()
 {
     Q_D(JChart);
     delete d;
+}
+
+QWebEngineView *JChart::view() const
+{
+    Q_D(const JChart);
+    return d->view;
+}
+
+QWebChannel *JChart::channel() const
+{
+    Q_D(const JChart);
+    return d->channel;
+}
+
+JEchartsOption *JChart::option() const
+{
+    Q_D(const JChart);
+    return d->option;
 }
 
 } // end of namespace JEcharts

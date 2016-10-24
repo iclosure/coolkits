@@ -20,33 +20,18 @@
             height: 100%;
         }
     </style>
-    <script type="text/javascript" src="./js/qwebchannel.js"></script>
-    <script>
-        var channel;
-        channel = new QWebChannel(qt.webChannelTransport, function (channel) {
-            window.bridge = channel.objects.bridge;
-        });
-
-        function onShowMsgBox() {
-            if (bridge) {
-                bridge.showMsgBox()
-            }
-        }
-
-        function showAlert() {
-            alert('this is web alert');
-        }
-    </script>
 </head>
 
 <body onresize="onWindowResize();">
     <div id="main"></div>
-    <script type="text/javascript" src="./js/echarts/echarts.js"></script>
-
+    <script src="./js/qwebchannel.js"></script>
+    <script src="./js/echarts/echarts.min.js"></script>
+    <script src="js/me/jecharts.option.js"></script>
     <script type="text/javascript">
         var myChart;
         window.onload = function() {
-            myChart = echarts.init(document.getElementById("main"))
+            //
+            myChart = echarts.init(document.getElementById("main"));
             myChart.setOption({
                 backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
                     offset: 0,
@@ -84,7 +69,7 @@
                     axisLabel: {
                         textStyle: {
                             fontSize: 12
-                        },
+                        }
                     }
                 },
                 yAxis: {
@@ -92,7 +77,7 @@
                     axisLabel: {
                         textStyle: {
                             fontSize: 12
-                        },
+                        }
                     }
                 },
                 series: [{
@@ -114,8 +99,18 @@
                 animation: true,
                 animationDuration: 200,
                 animationDurationUpdate: 500
-            })
-        }
+            });
+            //
+            try {
+                new QWebChannel(qt.webChannelTransport, function (channel) {
+                    window.option = channel.objects.option;
+                    //
+                    new JEchartsOption(myChart, channel, window.option);
+                });
+            } catch (e) {
+                console.error(e)
+            }
+        };
 
         function onWindowResize() {
             myChart.resize(window.innerWidth, window.innerHeight)

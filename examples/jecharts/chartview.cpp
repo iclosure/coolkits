@@ -8,13 +8,23 @@ ChartView::ChartView(QWidget *parent)
     QVBoxLayout *vertLayoutMain = new QVBoxLayout(this);
     vertLayoutMain->setContentsMargins(2, 2, 2, 2);
 
-    q_chartView = new JEcharts::JChartView(this);
-    q_chartView->setColumnCount(2);
-    vertLayoutMain->addWidget(q_chartView);
+    d_chartView = new JEcharts::JChartView(this);
+    d_chartView->setColumnCount(2);
+    vertLayoutMain->addWidget(d_chartView);
+
+    QPushButton *button1 = new QPushButton("test", this);
+    vertLayoutMain->addWidget(button1);
 
     //
     for (int i = 0; i < 1; ++i) {
-        q_chartView->appendChart(new JEcharts::JStepChart(this), false);
+        d_charts.append(new JEcharts::JStepChart(this));
+        d_chartView->appendChart(d_charts.last(), false);
     }
-    q_chartView->updateLayout();
+    d_chartView->updateLayout();
+
+    d_charts.first()->option()->setTitle("what??");
+
+    connect(button1, &QPushButton::clicked, [&](){
+        d_charts.first()->option()->setTitle("whats the problem?");
+    });
 }

@@ -16,4 +16,7 @@
         <file alias="jquery-3.1.1.min.js">html/js/jquery-3.1.1.min.js</file>
         <file alias="qwebchannel.js">html/js/qwebchannel.js</file>
     </qresource>
+    <qresource prefix="/coolkits/jecharts/html/js/me">
+        <file alias="jecharts.option.js">html/js/me/jecharts.option.js</file>
+    </qresource>
 </RCC>

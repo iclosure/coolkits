@@ -4,13 +4,9 @@
 #include <QWidget>
 #include "jecharts_global.h"
 
-class QWebEngineView;
-class QWebChannel;
-
 namespace JEcharts {
 
 class JChartPrivate;
-class JEchartsOption;
 
 /**
  * @brief The JChart class
@@ -20,29 +16,11 @@ class JECHARTS_EXPORT JChart : public QWidget
     Q_OBJECT
 public:
     /**
-     * @brief JEchart
+     * @brief JChart
      * @param parent
      */
     explicit JChart(QWidget *parent = 0);
     virtual ~JChart();
-
-    /**
-     * @brief view
-     * @return
-     */
-    QWebEngineView *view() const;
-
-    /**
-     * @brief channel
-     * @return
-     */
-    QWebChannel *channel() const;
-
-    /**
-     * @brief option
-     * @return
-     */
-    JEchartsOption *option() const;
 
 signals:
 

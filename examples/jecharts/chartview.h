@@ -5,6 +5,7 @@
 
 namespace JEcharts {
     class JChartView;
+    class JStepChart;
 }
 
 class ChartView : public QDialog
@@ -18,7 +19,8 @@ signals:
 public slots:
 
 private:
-    JEcharts::JChartView *q_chartView;
+    JEcharts::JChartView *d_chartView;
+    QList<JEcharts::JStepChart *> d_charts;
 };
 
 #endif // CHARTVIEW_H

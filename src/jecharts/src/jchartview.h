@@ -53,7 +53,7 @@ public:
      * @param chart
      * @param update
      */
-    void removeChart(JChart *chart, bool update = true);
+    void removeChart(JEcharts::JChart *chart, bool update = true);
 
     /**
      * @brief clearChart

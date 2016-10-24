@@ -14,7 +14,8 @@ jecharts_headers += \
     $$PWD/jchart.h \
     $$PWD/jchartview.h \
     $$PWD/jecharts_global.h \
-    $$PWD/jecharts_inc.h
+    $$PWD/jecharts_inc.h \
+    $$PWD/jecharts_option.h
 
 HEADERS += \
     $$jecharts_headers
@@ -22,7 +23,8 @@ HEADERS += \
 SOURCES += \
     $$PWD/jchart.cpp \
     $$PWD/jchartview.cpp \
-    $$PWD/jecharts_global.cpp
+    $$PWD/jecharts_global.cpp \
+    $$PWD/jecharts_option.cpp
 
 #
 framework_headers_echarts.version = Versions

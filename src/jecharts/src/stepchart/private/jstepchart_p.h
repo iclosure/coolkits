@@ -2,14 +2,11 @@
 #define JSTEPCHARTPRIVATE_H
 
 #include <QObject>
-#include "../jstepchart_option.h"
-
-class QWebEngineView;
-class QWebChannel;
+#include "../jstepchart.h"
 
 namespace JEcharts {
 
-class JStepChart;
+class JEcharts;
 
 class JStepChartPrivate : public QObject
 {
@@ -23,12 +20,10 @@ public:
 signals:
 
 public slots:
+    void onLoadFinished(bool loaded);
 
 private:
     J_DECLARE_PUBLIC(JStepChart)
-    QWebEngineView *view;
-    QWebChannel *channel;
-    JStepChartOption *option;
 };
 
 } // end of namespace JEcharts

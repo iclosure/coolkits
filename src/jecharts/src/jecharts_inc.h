@@ -3,7 +3,7 @@
 
 #include "jchartview.h"
 #include "jchart.h"
+#include "jecharts_option.h"
 #include "stepchart/jstepchart.h"
-#include "stepchart/jstepchart_option.h"
 
 #endif // JECHARTS_INC_H

@@ -1,6 +1,7 @@
 
 #include <QApplication>
 #include <QDateTime>
+#include <QDesktopWidget>
 #include "chartview.h"
 
 int main(int argc, char **argv)

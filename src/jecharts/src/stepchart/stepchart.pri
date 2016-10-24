@@ -9,8 +9,7 @@
 ################################################################
 
 stepchart_headers += \
-    $$PWD/jstepchart.h \
-    $$PWD/jstepchart_option.h
+    $$PWD/jstepchart.h
 
 HEADERS += \
     $$stepchart_headers \
@@ -18,7 +17,6 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/jstepchart.cpp \
-    $$PWD/jstepchart_option.cpp \
     $$PWD/private/jstepchart_p.cpp
 
 #
