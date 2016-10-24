@@ -20,7 +20,8 @@ void JStepChartPrivate::init()
 void JStepChartPrivate::load()
 {
     Q_Q(JStepChart);
-    q->view()->setUrl(QUrl("qrc:/coolkits/jecharts/html/stepchart.html"));
+    qobject_cast<QWebEngineView *>(q->view())
+            ->setUrl(QUrl("qrc:/coolkits/jecharts/html/stepchart.html"));
 }
 
 void JStepChartPrivate::onLoadFinished(bool loaded)

@@ -2,25 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ab7165cc-3154-4885-984e-0d0a35febecd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/me/jecharts.option.js" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../src/jecharts.h" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../src/stepchart/jstepchart_option.cpp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../src/stepchart/jstepchart_option.h" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../examples/jecharts/chartview.cpp" afterPath="$PROJECT_DIR$/../../../../examples/jecharts/chartview.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../examples/jecharts/chartview.h" afterPath="$PROJECT_DIR$/../../../../examples/jecharts/chartview.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../../examples/jecharts/main.cpp" afterPath="$PROJECT_DIR$/../../../../examples/jecharts/main.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../jecharts.pro" afterPath="$PROJECT_DIR$/../../jecharts.pro" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/me/jecharts.option.js" afterPath="$PROJECT_DIR$/js/me/jecharts.option.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/stepchart.html" afterPath="$PROJECT_DIR$/stepchart.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../jecharts.qrc" afterPath="$PROJECT_DIR$/../jecharts.qrc" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/jchart.cpp" afterPath="$PROJECT_DIR$/../../src/jchart.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/jchartview.h" afterPath="$PROJECT_DIR$/../../src/jchartview.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/jecharts_inc.h" afterPath="$PROJECT_DIR$/../../src/jecharts_inc.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/src.pri" afterPath="$PROJECT_DIR$/../../src/src.pri" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/jchart.h" afterPath="$PROJECT_DIR$/../../src/jchart.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/jecharts_option.cpp" afterPath="$PROJECT_DIR$/../../src/jecharts_option.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/jecharts_option.h" afterPath="$PROJECT_DIR$/../../src/jecharts_option.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/stepchart/private/jstepchart_p.cpp" afterPath="$PROJECT_DIR$/../../src/stepchart/private/jstepchart_p.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/stepchart/private/jstepchart_p.h" afterPath="$PROJECT_DIR$/../../src/stepchart/private/jstepchart_p.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../src/stepchart/stepchart.pri" afterPath="$PROJECT_DIR$/../../src/stepchart/stepchart.pri" />
     </list>
     <ignored path="jecharts.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,37 +34,27 @@
     <favorites_list name="jecharts" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6490566">
+    <splitter split-orientation="horizontal" split-proportion="0.6698113">
       <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="stepchart.html" pinned="false" current-in-tab="false">
+        <leaf>
+          <file leaf-file-name="stepchart.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/stepchart.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="195">
-                  <caret line="104" column="24" selection-start-line="104" selection-start-column="24" selection-end-line="104" selection-end-column="24" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="echarts.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/js/echarts/echarts.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="90">
-                  <caret line="15354" column="26" selection-start-line="15354" selection-start-column="26" selection-end-line="15354" selection-end-column="26" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="qwebchannel.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/js/qwebchannel.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="272">
-                  <caret line="420" column="40" selection-start-line="420" selection-start-column="40" selection-end-line="420" selection-end-column="40" />
+                <state relative-caret-position="140">
+                  <caret line="81" column="18" selection-start-line="81" selection-start-column="18" selection-end-line="81" selection-end-column="18" />
                   <folding>
-                    <marker date="1477216830000" expanded="true" signature="0:131" ph="/** ...*/" />
+                    <element signature="n#head#0;n#!!top" expanded="false" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="jecharts.option.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/js/me/jecharts.option.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="165">
+                  <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -82,22 +63,14 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="stepchart.html" pinned="false" current-in-tab="false">
+          <file leaf-file-name="stepchart.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/stepchart.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="128">
-                  <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="jecharts.option.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/js/me/jecharts.option.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="180">
-                  <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
-                  <folding />
+                <state relative-caret-position="335">
+                  <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+                  <folding>
+                    <element signature="n#head#0;n#!!top" expanded="false" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -126,8 +99,8 @@
         <option value="$PROJECT_DIR$/js/qwebchannel.js" />
         <option value="chrome-extension://eadndfjplgieldjbigjakmdgkmoaaaoc/content.js" />
         <option value="/" />
-        <option value="$PROJECT_DIR$/stepchart.html" />
         <option value="$PROJECT_DIR$/js/me/jecharts.option.js" />
+        <option value="$PROJECT_DIR$/stepchart.html" />
       </list>
     </option>
   </component>
@@ -138,8 +111,6 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-10" />
-    <option name="y" value="14" />
     <option name="width" value="1280" />
     <option name="height" value="749" />
   </component>
@@ -340,12 +311,12 @@
       <workItem from="1477208158169" duration="1661000" />
       <workItem from="1477210392296" duration="1186000" />
       <workItem from="1477212221829" duration="11131000" />
-      <workItem from="1477271233072" duration="13330000" />
+      <workItem from="1477271233072" duration="21563000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29501000" />
+    <option name="totallyTimeSpent" value="37734000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -357,8 +328,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-10" y="14" width="1280" height="749" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1280" height="749" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15806195" sideWeight="0.49148935" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -369,7 +340,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17712471" sideWeight="0.50851065" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15981735" sideWeight="0.49722" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15981735" sideWeight="0.49722" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -403,7 +374,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="n#head#0;n#!!top" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -505,14 +478,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/me/jecharts.option.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/qwebchannel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -523,19 +488,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/stepchart.html">
+    <entry file="file://$PROJECT_DIR$/js/me/jecharts.option.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="104" column="24" selection-start-line="104" selection-start-column="24" selection-end-line="104" selection-end-column="24" />
+        <state relative-caret-position="165">
+          <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/echarts/echarts.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="15354" column="26" selection-start-line="15354" selection-start-column="26" selection-end-line="15354" selection-end-column="26" />
+        <state relative-caret-position="-1815">
+          <caret line="1217" column="7" selection-start-line="1217" selection-start-column="7" selection-end-line="1217" selection-end-column="7" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stepchart.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+          <folding>
+            <element signature="n#head#0;n#!!top" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

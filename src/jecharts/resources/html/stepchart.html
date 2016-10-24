@@ -32,7 +32,7 @@
         window.onload = function() {
             //
             myChart = echarts.init(document.getElementById("main"));
-            myChart.setOption({
+            myChart.setOption({/*
                 backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
                     offset: 0,
                     color: '#f7f8fa'
@@ -42,7 +42,7 @@
                 }]),
                 title: {
                     text: 'Step Line'
-                },
+                },*/
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -111,6 +111,17 @@
                 console.error(e)
             }
         };
+
+        function setOption(content) {
+            myChart.setOption(content)
+        }
+
+        function addData(i, value) {
+            option.series[i].data.append(value);
+            myChart.setOption({
+                series: [option.series[i]]
+            });
+        }
 
         function onWindowResize() {
             myChart.resize(window.innerWidth, window.innerHeight)

@@ -25,8 +25,10 @@ private:
     QWebEngineView *view;
     QWebChannel *channel;
     // option
+    QString option;
     QString title;
     QVector<QColor> color;
+    QColor backgroundColor;
     bool animation;
     int animationDuration;
 };
@@ -37,12 +39,8 @@ void JEchartsOptionPrivate::init()
 
     //
     chart = qobject_cast<JChart *>(q->parent());
-    view = chart->view();
-    channel = chart->channel();
-
-    //
-    QObject::connect(chart->view(), SIGNAL(titleChanged(QString)),
-                     q, SIGNAL(titleChanged(QString)));
+    view = qobject_cast<QWebEngineView *>(chart->view());
+    channel = qobject_cast<QWebChannel *>(chart->channel());
 }
 
 // class JEchartsOption
@@ -61,6 +59,15 @@ JEchartsOption::~JEchartsOption()
     delete d;
 }
 
+void JEchartsOption::setOption(const QString &content)
+{
+    Q_D(JEchartsOption);
+    d->view->page()->runJavaScript(QString("setOption(%1)").arg(content),
+                                   [](const QVariant &value){
+        qDebug() << value;
+    });
+}
+
 QString JEchartsOption::title() const
 {
     Q_D(const JEchartsOption);
@@ -73,6 +80,12 @@ QVector<QColor> JEchartsOption::color() const
     return d->color;
 }
 
+QColor JEchartsOption::backgroundColor() const
+{
+    Q_D(const JEchartsOption);
+    return d->backgroundColor;
+}
+
 bool JEchartsOption::animation() const
 {
     Q_D(const JEchartsOption);
@@ -83,6 +96,21 @@ int JEchartsOption::animationDuration() const
 {
     Q_D(const JEchartsOption);
     return d->animationDuration;
+}
+
+QString JEchartsOption::option() const
+{
+    Q_D(const JEchartsOption);
+    return d->option;
+}
+
+void JEchartsOption::addData(int index, const QVariant &value)
+{
+    Q_D(JEchartsOption);
+    d->view->page()->runJavaScript(QString("addData(%1, %2)").arg(index).arg(value.toString()),
+                                   [](const QVariant &value){
+        qDebug() << value;
+    });
 }
 
 void JEchartsOption::setTitle(const QString &value)
@@ -100,6 +128,15 @@ void JEchartsOption::setColor(const QVector<QColor> &value)
     if (value != d->color) {
         d->color = value;
         emit colorChanged(value);
+    }
+}
+
+void JEchartsOption::setBackgroundColor(const QColor &value)
+{
+    Q_D(JEchartsOption);
+    if (value != d->backgroundColor) {
+        d->backgroundColor = value;
+        emit backgroundColorChanged(value);
     }
 }
 

@@ -15,10 +15,12 @@ class JEcharts;
 class JECHARTS_EXPORT JEchartsOption : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString option READ option WRITE setOption)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QVector<QColor> color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(bool animation READ animation WRITE setAnimation NOTIFY animationChanged)
     Q_PROPERTY(int animationDuration READ animationDuration WRITE setAnimationDuration NOTIFY animationDurationChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
 public:
     explicit JEchartsOption(QObject *parent = 0);
     ~JEchartsOption();
@@ -27,18 +29,25 @@ public:
 
     QString title() const;
     QVector<QColor> color() const;
+    QColor backgroundColor() const;
     bool animation() const;
     int animationDuration() const;
+    QString option() const;
+
+    Q_INVOKABLE void addData(int index, const QVariant &value);
 
 signals:
     void titleChanged(const QString &value);
     void colorChanged(const QVector<QColor> &value);
+    void backgroundColorChanged(const QColor &value);
     void animationChanged(bool value);
     void animationDurationChanged(int value);
 
 public slots:
+    void setOption(const QString &content);
     void setTitle(const QString &value);
     void setColor(const QVector<QColor> &value);
+    void setBackgroundColor(const QColor &value);
     void setAnimation(bool value);
     void setAnimationDuration(int value);
 

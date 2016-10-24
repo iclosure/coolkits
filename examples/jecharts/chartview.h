@@ -17,6 +17,7 @@ public:
 signals:
 
 public slots:
+    void onLoadFinished(bool loaded);
 
 private:
     JEcharts::JChartView *d_chartView;

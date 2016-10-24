@@ -57,19 +57,19 @@ JChart::~JChart()
     delete d;
 }
 
-QWebEngineView *JChart::view() const
+QObject *JChart::view() const
 {
     Q_D(const JChart);
     return d->view;
 }
 
-QWebChannel *JChart::channel() const
+QObject *JChart::channel() const
 {
     Q_D(const JChart);
     return d->channel;
 }
 
-JEchartsOption *JChart::option() const
+QObject *JChart::option() const
 {
     Q_D(const JChart);
     return d->option;

@@ -30,19 +30,19 @@ public:
      * @brief view
      * @return
      */
-    QWebEngineView *view() const;
+    QObject *view() const;
 
     /**
      * @brief channel
      * @return
      */
-    QWebChannel *channel() const;
+    QObject *channel() const;
 
     /**
      * @brief option
      * @return
      */
-    JEchartsOption *option() const;
+    QObject *option() const;
 
 signals:
 
