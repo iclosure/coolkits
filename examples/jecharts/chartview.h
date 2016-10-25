@@ -19,9 +19,13 @@ signals:
 public slots:
     void onLoadFinished(bool loaded);
 
+protected:
+    void timerEvent(QTimerEvent *e);
+
 private:
     JEcharts::JChartView *d_chartView;
     QList<JEcharts::JStepChart *> d_charts;
+    int d_timerId;
 };
 
 #endif // CHARTVIEW_H

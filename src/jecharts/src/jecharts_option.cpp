@@ -64,7 +64,8 @@ void JEchartsOption::setOption(const QString &content)
     Q_D(JEchartsOption);
     d->view->page()->runJavaScript(QString("setOption(%1)").arg(content),
                                    [](const QVariant &value){
-        qDebug() << value;
+        Q_UNUSED(value);
+        //qDebug() << value;
     });
 }
 
@@ -104,12 +105,23 @@ QString JEchartsOption::option() const
     return d->option;
 }
 
-void JEchartsOption::addData(int index, const QVariant &value)
+void JEchartsOption::appendData(int index, const QVariant &data)
 {
     Q_D(JEchartsOption);
-    d->view->page()->runJavaScript(QString("addData(%1, %2)").arg(index).arg(value.toString()),
+    d->view->page()->runJavaScript(QString("appendData(%1, %2)").arg(index).arg(data.toString()),
                                    [](const QVariant &value){
-        qDebug() << value;
+        Q_UNUSED(value);
+        //qDebug() << value;
+    });
+}
+
+void JEchartsOption::leftShiftData(int index, const QVariant &data)
+{
+    Q_D(JEchartsOption);
+    d->view->page()->runJavaScript(QString("leftShiftData(%1, %2)").arg(index).arg(data.toString()),
+                                   [](const QVariant &value){
+        Q_UNUSED(value);
+        //qDebug() << value;
     });
 }
 

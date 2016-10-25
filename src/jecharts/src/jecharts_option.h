@@ -15,7 +15,7 @@ class JEcharts;
 class JECHARTS_EXPORT JEchartsOption : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString option READ option WRITE setOption)
+    Q_PROPERTY(QString option READ option WRITE setOption NOTIFY optionChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QVector<QColor> color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(bool animation READ animation WRITE setAnimation NOTIFY animationChanged)
@@ -34,9 +34,11 @@ public:
     int animationDuration() const;
     QString option() const;
 
-    Q_INVOKABLE void addData(int index, const QVariant &value);
+    Q_INVOKABLE void appendData(int index, const QVariant &data);
+    Q_INVOKABLE void leftShiftData(int index, const QVariant &data);
 
 signals:
+    void optionChanged(const QString &value);
     void titleChanged(const QString &value);
     void colorChanged(const QVector<QColor> &value);
     void backgroundColorChanged(const QColor &value);

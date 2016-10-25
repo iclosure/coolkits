@@ -116,10 +116,20 @@
             myChart.setOption(content)
         }
 
-        function addData(i, value) {
-            option.series[i].data.append(value);
+        function appendData(i, value) {
+            var series = myChart.getOption().series;
+            series[i].data.push(value);
             myChart.setOption({
-                series: [option.series[i]]
+                series: [series[i]]
+            });
+        }
+
+        function leftShiftData(i, value) {
+            var series = myChart.getOption().series;
+            series[i].data.push(value);
+            series[i].data.shift();
+            myChart.setOption({
+                series: [series[i]]
             });
         }
 
